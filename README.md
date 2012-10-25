@@ -10,7 +10,7 @@ Usage
 
 Add `data-toggle="context"` to any element that needs a custom context menu and via CSS set `position: relative` to the element.
 
-Anchor `data-target` attribute to your custom context menu.
+Point `data-target` attribute to your custom context menu.
 
 `<div class="context" data-toggle="context" data-target="#context-menu"></div>`
 
@@ -25,4 +25,4 @@ See demo.html for a complete example.
 Cross-Browser Tested
 --------------------
 
-I've tested the modal on IE8+, Firefox 4+ and Chrome. Let me know if you find any compatibility issues.
+I've tested the context menu plugin on IE8+, Firefox 4+ and Chrome. Let me know if you find any compatibility issues.
