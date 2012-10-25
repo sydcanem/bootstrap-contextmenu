@@ -8,7 +8,7 @@ Usage
 
 ### Via data attributes
 
-Add `data-toggle="context"` to any element that needs a custom context menu.
+Add `data-toggle="context"` to any element that needs a custom context menu and via CSS set `position: relative` to the element.
 
 Anchor `data-target` attribute to your custom context menu.
 
@@ -19,3 +19,10 @@ Anchor `data-target` attribute to your custom context menu.
 Call the context menu via JavaScript:
 
 `$('.context').contextmenu()`
+
+See demo.html for a complete example.
+
+Cross-Browser Tested
+--------------------
+
+I've tested the modal on IE8+, Firefox 4+ and Chrome. Let me know if you find any compatibility issues.
