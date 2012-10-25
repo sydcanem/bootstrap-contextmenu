@@ -90,25 +90,29 @@
   }
 
   function getPosition(e, $this, $menu) {
-    var posX = e.pageX - $this[0].offsetLeft
+    var mouseX = e.pageX
+      , mouseY = e.pageY
+      , posX = e.pageX - $this[0].offsetLeft
       , posY = e.pageY - $this[0].offsetTop
-      , boundsX = $this.width()
-      , boundsY = $this.height()
+      , contextX = $this.width()
+      , contextY = $this.height()
+      , boundsX = $(window).width()
+      , boundsY = $(window).height()
       , menuWidth = $menu.find('.dropdown-menu').outerWidth()
       , menuHeight = $menu.find('.dropdown-menu').outerHeight()
       , tp = {"position":"absolute"}
       , Y, X;
 
-    if (posY + menuHeight > boundsY) {
-      Y = {"bottom": (boundsY - posY) + menuHeight};
+    if (mouseY + menuHeight > boundsY) {
+      Y = {"bottom": (contextY - posY) + menuHeight};
     } else {
       Y = {"top": posY};
     }
 
-    if (posX + menuWidth > boundsX) {
-      X = {"right": ( boundsX - posX ) + menuWidth};
+    if (mouseX + menuWidth > boundsX) {
+      X = {"right": (contextX - posX) + menuWidth};
     } else {
-       X = {"left": posX};
+      X = {"left": posX};
     }
 
     return $.extend(tp, Y, X);
