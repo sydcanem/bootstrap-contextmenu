@@ -133,6 +133,9 @@
 
   $.fn.contextmenu.Constructor = ContextMenu;
 
+  /* APPLY TO STANDARD DROPDOWN ELEMENTS
+   * =================================== */
+   
   $(function () {
     $('html')
       .on('click.context.data-api', clearMenus)
