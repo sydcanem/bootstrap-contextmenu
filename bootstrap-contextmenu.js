@@ -2,10 +2,13 @@
  * Bootstrap Context Menu
  * Version: 1.0
  * A small variation of the dropdown plugin by @sydcanem
+ * https://github.com/sydcanem/bootstrap-contextmenu
+ *
  * Twitter Bootstrap (http://twitter.github.com/bootstrap).
  */
 
 /* =========================================================
+ * bootstrap-dropdown.js
  * http://twitter.github.com/bootstrap/
  * =========================================================
  * Copyright 2012 Twitter, Inc.
