@@ -99,19 +99,19 @@
       , tp = {"position":"absolute"}
       , Y, X;
 
-      if (posY + menuHeight > boundsY) {
-        Y = {"bottom": (boundsY - posY) + menuHeight};
-      } else {
-        Y = {"top": posY};
-      }
+    if (posY + menuHeight > boundsY) {
+      Y = {"bottom": (boundsY - posY) + menuHeight};
+    } else {
+      Y = {"top": posY};
+    }
 
-      if (posX + menuWidth > boundsX) {
-        X = {"right": ( boundsX - posX ) + menuWidth};
-      } else {
-        X = {"left": posX};
-      }
+    if (posX + menuWidth > boundsX) {
+      X = {"right": ( boundsX - posX ) + menuWidth};
+    } else {
+       X = {"left": posX};
+    }
 
-      return $.extend(tp, Y, X);
+    return $.extend(tp, Y, X);
   }
 
   function clearMenus() {
@@ -133,9 +133,9 @@
 
   $.fn.contextmenu.Constructor = ContextMenu;
 
-  /* APPLY TO STANDARD DROPDOWN ELEMENTS
+  /* APPLY TO STANDARD CONTEXT MENU ELEMENTS
    * =================================== */
-   
+
   $(function () {
     $('html')
       .on('click.context.data-api', clearMenus)
