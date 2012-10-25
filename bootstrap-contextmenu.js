@@ -1,7 +1,7 @@
 /*!
  * Bootstrap Context Menu
  * Version: 1.0
- * A small variation of the dropdown plugin by twitter bootstrap
+ * A small variation of the dropdown plugin by @sydcanem
  * Twitter Bootstrap (http://twitter.github.com/bootstrap).
  */
 
