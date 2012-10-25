@@ -41,98 +41,97 @@
           });
       }
 
-    ContextMenu.prototype = {
+  ContextMenu.prototype = {
 
-      constructor: ContextMenu
+    constructor: ContextMenu
+    ,toggle: function(e) {
 
-      ,toggle: function(e) {
+      var $this = $(this)
+        , $menu
+        , $contextmenu;
 
-        var $this = $(this)
-          , $menu
-          , $contextmenu;
+      if ($this.is('.disabled, :disabled')) return;
 
-        if ($this.is('.disabled, :disabled')) return;
+      $menu = getMenu($this);
+      $menu.removeClass('open');
 
-        $menu = getMenu($this);
-        $menu.removeClass('open');
+      $contextmenu = $this.find('#context-menu');
 
-        $contextmenu = $this.find('#context-menu');
-
-        if (!$contextmenu.length) {
-            var tp = getPosition(e, $this, $menu);
-            $menu.attr('style', '')
-                  .css(tp)
-                  .addClass('open');
-            $this.append($menu);
-        } else {
-            var tp = getPosition(e, $this, $menu);
-            $menu.attr('style', '')
-                  .css(tp)
-                  .toggleClass('open');
-        }
-
-        return false;
+      if (!$contextmenu.length) {
+        var tp = getPosition(e, $this, $menu);
+        $menu.attr('style', '')
+              .css(tp)
+              .addClass('open');
+        $this.append($menu);
+      } else {
+        var tp = getPosition(e, $this, $menu);
+        $menu.attr('style', '')
+              .css(tp)
+              .toggleClass('open');
       }
 
+      return false;
     }
 
-    function getMenu($this) {
-      var selector = $this.attr('data-target')
-        , $menu;
+  }
 
-      if (!selector) {
-          selector = $this.attr('href')
-          selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
+  function getMenu($this) {
+    var selector = $this.attr('data-target')
+      , $menu;
+
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
+    }
+
+    $menu = $(selector);
+
+    return $menu;
+  }
+
+  function getPosition(e, $this, $menu) {
+    var posX = e.pageX - $this[0].offsetLeft
+      , posY = e.pageY - $this[0].offsetTop
+      , boundsX = $this.width()
+      , boundsY = $this.height()
+      , menuWidth = $menu.find('.dropdown-menu').outerWidth()
+      , menuHeight = $menu.find('.dropdown-menu').outerHeight()
+      , tp = {"position":"absolute"}
+      , Y, X;
+
+      if (posY + menuHeight > boundsY) {
+        Y = {"bottom": (boundsY - posY) + menuHeight};
+      } else {
+        Y = {"top": posY};
       }
 
-      $menu = $(selector);
+      if (posX + menuWidth > boundsX) {
+        X = {"right": ( boundsX - posX ) + menuWidth};
+      } else {
+        X = {"left": posX};
+      }
 
-      return $menu;
-    }
+      return $.extend(tp, Y, X);
+  }
 
-    function getPosition(e, $this, $menu) {
-      var posX = e.pageX - $this[0].offsetLeft
-        , posY = e.pageY - $this[0].offsetTop
-        , boundsX = $this.width()
-        , boundsY = $this.height()
-        , menuWidth = $menu.find('.dropdown-menu').outerWidth()
-        , menuHeight = $menu.find('.dropdown-menu').outerHeight()
-        , tp = {"position":"absolute"}
-        , Y, X;
-
-        if (posY + menuHeight > boundsY) {
-          Y = {"bottom": (boundsY - posY) + menuHeight};
-        } else {
-          Y = {"top": posY};
-        }
-
-        if (posX + menuWidth > boundsX) {
-          X = {"right": ( boundsX - posX ) + menuWidth};
-        } else {
-          X = {"left": posX};
-        }
-
-        return $.extend(tp, Y, X);
-    }
-
-    function clearMenus() {
-      getMenu($(toggle))
+  function clearMenus() {
+    getMenu($(toggle))
         .removeClass('open');
-    }
+  }
 
   /* CONTEXT MENU PLUGIN DEFINITION
    * ========================== */
 
-    $.fn.contextmenu = function (option) {
-      return this.each(function () {
-         var $this = $(this)
-          , data = $this.data('context');
-          if (!data) $this.data('context', (data = new ContextMenu(this)));
-          if (typeof option == 'string') data[option].call($this);
-      });
-    }
+  $.fn.contextmenu = function (option) {
+    return this.each(function () {
+      var $this = $(this)
+        , data = $this.data('context');
+      if (!data) $this.data('context', (data = new ContextMenu(this)));
+      if (typeof option == 'string') data[option].call($this);
+    });
+  }
 
-    $.fn.contextmenu.Constructor = ContextMenu;
+  $.fn.contextmenu.Constructor = ContextMenu;
 
   $(function () {
     $('html')
