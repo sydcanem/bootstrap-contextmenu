@@ -3,6 +3,8 @@ Bootstrap Context Menu
 
 A context menu extension of Twitter Bootstrap made for everyone's convenience.
 
+See Demo here : http://jsfiddle.net/msurguy/PG5HU/
+
 Usage
 -----
 
