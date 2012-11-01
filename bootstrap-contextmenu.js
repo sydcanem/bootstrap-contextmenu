@@ -35,10 +35,11 @@
 
   var toggle = '[data-toggle=context]'
     , ContextMenu = function (element) {
-      var $el = $(element).on('contextmenu.context.data-api', this.toggle);
-          $('html').on('click.context.data-api', function () {
-              $el.find('#context-menu').removeClass('open');
-          });
+        var $el = $(element).on('contextmenu.context.data-api', this.toggle);
+        var $target = $($el.attr('data-target'));
+        $('html').on('click.context.data-api', function () {
+            $target.removeClass('open');
+        });
       }
 
   ContextMenu.prototype = {
