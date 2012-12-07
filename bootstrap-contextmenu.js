@@ -38,7 +38,9 @@
         var $el = $(element).on('contextmenu.context.data-api', this.toggle);
         var $target = $($el.attr('data-target'));
         $('html').on('click.context.data-api', function () {
+          if (!e.ctrlKey) {
             $target.removeClass('open');
+          }
         });
       }
 
@@ -119,9 +121,12 @@
     return $.extend(tp, Y, X);
   }
 
-  function clearMenus() {
-    getMenu($(toggle))
-        .removeClass('open');
+  function clearMenus(e) {
+    if (!e.ctrlKey) {
+      getMenu($(toggle))
+          .removeClass('open');
+    }
+
   }
 
   /* CONTEXT MENU PLUGIN DEFINITION
