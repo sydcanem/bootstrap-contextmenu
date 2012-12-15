@@ -37,7 +37,7 @@
     , ContextMenu = function (element) {
         var $el = $(element).on('contextmenu.context.data-api', this.toggle);
         var $target = $($el.attr('data-target'));
-        $('html').on('click.context.data-api', function () {
+        $('html').on('click.context.data-api', function (e) {
           if (!e.ctrlKey) {
             $target.removeClass('open');
           }
