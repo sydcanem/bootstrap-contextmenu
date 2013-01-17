@@ -114,7 +114,6 @@
           .removeClass('open');
       });
     }
-
   }
 
   /* CONTEXT MENU PLUGIN DEFINITION
