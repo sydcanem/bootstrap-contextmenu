@@ -1,6 +1,6 @@
 /*!
  * Bootstrap Context Menu
- * Version: 1.0
+ * Version: 2.0
  * A small variation of the dropdown plugin by @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
  *
@@ -37,8 +37,10 @@
     , ContextMenu = function (element) {
         var $el = $(element).on('contextmenu.context.data-api', this.toggle);
         var $target = $($el.attr('data-target'));
-        $('html').on('click.context.data-api', function () {
+        $('html').on('click.context.data-api', function (e) {
+          if (!e.ctrlKey) {
             $target.removeClass('open');
+          }
         });
       }
 
@@ -56,20 +58,10 @@
       $menu = getMenu($this);
       $menu.removeClass('open');
 
-      $contextmenu = $this.find('#context-menu');
-
-      if (!$contextmenu.length) {
-        var tp = getPosition(e, $this, $menu);
-        $menu.attr('style', '')
-              .css(tp)
-              .addClass('open');
-        $this.append($menu);
-      } else {
-        var tp = getPosition(e, $this, $menu);
-        $menu.attr('style', '')
+      var tp = getPosition(e, $menu);
+      $menu.attr('style', '')
               .css(tp)
               .toggleClass('open');
-      }
 
       return false;
     }
@@ -90,13 +82,9 @@
     return $menu;
   }
 
-  function getPosition(e, $this, $menu) {
+  function getPosition(e, $menu) {
     var mouseX = e.pageX
       , mouseY = e.pageY
-      , posX = e.pageX - $this[0].offsetLeft
-      , posY = e.pageY - $this[0].offsetTop
-      , contextX = $this.width()
-      , contextY = $this.height()
       , boundsX = $(window).width()
       , boundsY = $(window).height()
       , menuWidth = $menu.find('.dropdown-menu').outerWidth()
@@ -105,23 +93,28 @@
       , Y, X;
 
     if (mouseY + menuHeight > boundsY) {
-      Y = {"bottom": (contextY - posY) + menuHeight};
+      Y = {"top": mouseY - menuHeight};
     } else {
-      Y = {"top": posY};
+      Y = {"top": mouseY};
     }
 
     if (mouseX + menuWidth > boundsX) {
-      X = {"right": (contextX - posX) + menuWidth};
+      X = {"left": mouseX - menuWidth};
     } else {
-      X = {"left": posX};
+      X = {"left": mouseX};
     }
 
     return $.extend(tp, Y, X);
   }
 
-  function clearMenus() {
-    getMenu($(toggle))
-        .removeClass('open');
+  function clearMenus(e) {
+    if (!e.ctrlKey) {
+      $(toggle).each(function() {
+        getMenu($(this))
+          .removeClass('open');
+      });
+    }
+
   }
 
   /* CONTEXT MENU PLUGIN DEFINITION

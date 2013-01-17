@@ -6,6 +6,13 @@ A context menu extension of Twitter Bootstrap made for everyone's convenience.
 See a [JS Fiddle Demo] [id]
 [id]:http://jsfiddle.net/msurguy/PG5HU/
 
+
+Update
+------
+
+- Removed `position: relative` requirement for elements that needs context menu
+- Fixed closing bug when using two context menu
+
 Usage
 -----
 
