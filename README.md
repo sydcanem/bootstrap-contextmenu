@@ -11,7 +11,7 @@ Update
 ------
 
 - Removed `position: relative` requirement for elements that needs context menu
-- Fixed closing bug when using two context menu
+- Fixed closing bug when using multiple context menu in a single page
 
 Usage
 -----
