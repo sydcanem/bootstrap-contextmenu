@@ -51,9 +51,13 @@
 
       var $this = $(this)
         , $menu
-        , $contextmenu;
+        , $contextmenu
+        , evt;
 
       if ($this.is('.disabled, :disabled')) return;
+      
+      evt = $.Event('context');
+      $this.trigger(evt);
 
       $menu = getMenu($this);
       $menu.removeClass('open');
