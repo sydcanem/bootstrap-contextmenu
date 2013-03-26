@@ -87,8 +87,8 @@
   }
 
   function getPosition(e, $menu) {
-    var mouseX = e.pageX
-      , mouseY = e.pageY
+    var mouseX = e.clientX
+      , mouseY = e.clientY
       , boundsX = $(window).width()
       , boundsY = $(window).height()
       , menuWidth = $menu.find('.dropdown-menu').outerWidth()
