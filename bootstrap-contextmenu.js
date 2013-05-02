@@ -1,17 +1,19 @@
 /*!
  * Bootstrap Context Menu
- * Version: 2.0
+ * Version: 2.1
  * A small variation of the dropdown plugin by @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
+ *
+ * New options added by @jeremyhubble for javascript launching
+ *  $('#elem').contextmenu({target:'#menu',before:function(e) { return true; } });
+ *   
  *
  * Twitter Bootstrap (http://twitter.github.com/bootstrap).
  */
 
 /* =========================================================
- * bootstrap-dropdown.js
- * http://twitter.github.com/bootstrap/
+ * bootstrap-contextmenu.js
  * =========================================================
- * Copyright 2012 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,55 +35,57 @@
   /* CONTEXTMENU CLASS DEFINITION
    * ============================ */
 
-  var toggle = '[data-toggle=context]'
-    , ContextMenu = function (element, options) {
+  var ContextMenu = function (element, options) {
         this.$element = $(element)
-        this.options = $.extend({}, $.fn.typeahead.defaults, options)
+        this.options = options
         this.before = this.options.before || this.before
+        if (this.options.target) 
+            this.$element.attr('data-target',this.options.target)
         this.listen()
       }
 
   ContextMenu.prototype = {
 
     constructor: ContextMenu
-    ,toggle: function(e,data) {
+    ,show: function(e) {
 
       var $this = $(this)
         , $menu
         , $contextmenu
         , evt;
 
+
       if ($this.is('.disabled, :disabled')) return;
-      
+
       evt = $.Event('context');
 
-      this.before.call(this,e);
-      console.log("triggering:",evt);
+      if (!this.before.call(this,e)) return;
       $this.trigger(evt);
 
-      $menu = this.getMenu($this);
-      console.log("MENU:",$menu);
-      $menu.removeClass('open');
+      $menu = this.getMenu();
 
       var tp = this.getPosition(e, $menu);
       $menu.attr('style', '')
               .css(tp)
-              .toggleClass('open');
+              .addClass('open');
 
       return false;
     }
 
-    
+    ,closemenu: function(e) {
+        this.getMenu().removeClass('open')
+    }
+
     ,before: function(e) {
-        console.log("BEFORE");
+        return true;
     }
 
     ,listen: function () {
         this.$element
-            .on('contextmenu.context.data-api',  $.proxy(this.toggle, this))
+            .on('contextmenu.context.data-api',  $.proxy(this.show, this))
         $('html')
-            .on('click.context.data-api', $.proxy(this.toggle, this))
-        var $target = this.$element.attr('data-target');
+            .on('click.context.data-api', $.proxy(this.closemenu, this))
+        var $target = $(this.$element.attr('data-target'));
         $('html').on('click.context.data-api', function (e) {
           if (!e.ctrlKey) {
             $target.removeClass('open');
@@ -90,12 +94,12 @@
     }
 
 
-      ,getMenu: function ($this) {
-        var selector = $this.attr('data-target')
+      ,getMenu: function () {
+        var selector = this.$element.attr('data-target')
           , $menu;
 
         if (!selector) {
-          selector = $this.attr('href')
+          selector = this.$element.attr('href')
           selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
         }
 
@@ -120,7 +124,7 @@
           Y = {"top": mouseY};
         }
 
-        if (mouseX + menuWidth > boundsX) {
+        if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) >0)) {
           X = {"left": mouseX - menuWidth};
         } else {
           X = {"left": mouseX};
@@ -131,8 +135,8 @@
 
       ,clearMenus: function(e) {
         if (!e.ctrlKey) {
-          $(toggle).each(function() {
-            this.getMenu($(this))
+          $('[data-toggle=context]').each(function() {
+            this.getMenu()
               .removeClass('open');
           });
         }
@@ -142,13 +146,15 @@
   /* CONTEXT MENU PLUGIN DEFINITION
    * ========================== */
 
-  $.fn.contextmenu = function (option) {
+  $.fn.contextmenu = function (option,e) {
         return this.each(function () {
           var $this = $(this)
         , data = $this.data('context')
         , options = typeof option == 'object' && option
+    
       if (!data) $this.data('context', (data = new ContextMenu(this, options)));
-      if (typeof option == 'string') data[option].call($this);
+      // "show" method must also be passed the event for positioning
+      if (typeof option == 'string') data[option].call(data,e);
     });
   }
 
@@ -158,6 +164,9 @@
    * =================================== */
 
     $(document)
-      .on('contextmenu.context.data-api', toggle, ContextMenu.prototype.toggle);
+      .on('contextmenu.context.data-api', '[data-toggle=context]', function(e) {
+          $(this).contextmenu('show',e);
+          e.preventDefault();
+      })
 
 }(window.jQuery));
