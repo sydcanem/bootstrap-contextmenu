@@ -30,143 +30,155 @@
 
 !(function($) {
 
-  "use strict"; // jshint ;_;
+	"use strict"; // jshint ;_;
 
-  /* CONTEXTMENU CLASS DEFINITION
-   * ============================ */
+	/* CONTEXTMENU CLASS DEFINITION
+	 * ============================ */
 
-  var ContextMenu = function (element, options) {
-        this.$element = $(element)
-        this.options = options
-        this.before = this.options.before || this.before
-        if (this.options.target) 
-            this.$element.attr('data-target',this.options.target)
-        this.listen()
-      }
+	var ContextMenu = function (element, options) {
+			this.$element = $(element)
+			this.options = options
+			this.before = this.options.before || this.before
+			this.onItem = this.options.onItem || this.onItem
+			if (this.options.target) 
+				this.$element.attr('data-target',this.options.target)
 
-  ContextMenu.prototype = {
+			this.listen()
+		}
 
-    constructor: ContextMenu
-    ,show: function(e) {
+	ContextMenu.prototype = {
 
-      var $this = $(this)
-        , $menu
-        , $contextmenu
-        , evt;
+		constructor: ContextMenu
+		,show: function(e) {
 
-
-      if ($this.is('.disabled, :disabled')) return;
-
-      evt = $.Event('context');
-
-      if (!this.before.call(this,e)) return;
-      $this.trigger(evt);
-
-      $menu = this.getMenu();
-
-      var tp = this.getPosition(e, $menu);
-      $menu.attr('style', '')
-              .css(tp)
-              .addClass('open');
-
-      return false;
-    }
-
-    ,closemenu: function(e) {
-        this.getMenu().removeClass('open')
-    }
-
-    ,before: function(e) {
-        return true;
-    }
-
-    ,listen: function () {
-        this.$element
-            .on('contextmenu.context.data-api',  $.proxy(this.show, this))
-        $('html')
-            .on('click.context.data-api', $.proxy(this.closemenu, this))
-        var $target = $(this.$element.attr('data-target'));
-        $('html').on('click.context.data-api', function (e) {
-          if (!e.ctrlKey) {
-            $target.removeClass('open');
-          }
-        });
-    }
+			var $this = $(this)
+				, $menu
+				, $contextmenu
+				, evt;
 
 
-      ,getMenu: function () {
-        var selector = this.$element.attr('data-target')
-          , $menu;
+			if ($this.is('.disabled, :disabled')) return;
 
-        if (!selector) {
-          selector = this.$element.attr('href')
-          selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
-        }
+			evt = $.Event('context');
+			if (!this.before.call(this,e,this.$element)) return;
+			this.$element.trigger(evt);
 
-        $menu = $(selector);
+			$menu = this.getMenu();
 
-        return $menu;
-      }
+			var tp = this.getPosition(e, $menu);
+			$menu.attr('style', '')
+				.css(tp)
+				.addClass('open');
 
-      ,getPosition: function(e, $menu) {
-        var mouseX = e.clientX
-          , mouseY = e.clientY
-          , boundsX = $(window).width()
-          , boundsY = $(window).height()
-          , menuWidth = $menu.find('.dropdown-menu').outerWidth()
-          , menuHeight = $menu.find('.dropdown-menu').outerHeight()
-          , tp = {"position":"fixed"}
-          , Y, X;
 
-        if (mouseY + menuHeight > boundsY) {
-          Y = {"top": mouseY - menuHeight};
-        } else {
-          Y = {"top": mouseY};
-        }
+			return false;
+		}
 
-        if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) >0)) {
-          X = {"left": mouseX - menuWidth};
-        } else {
-          X = {"left": mouseX};
-        }
+		,closemenu: function(e) {
+			this.getMenu().removeClass('open');
+		}
 
-        return $.extend(tp, Y, X);
-      }
+		,before: function(e) {
+			return true;
+		}
 
-      ,clearMenus: function(e) {
-        if (!e.ctrlKey) {
-          $('[data-toggle=context]').each(function() {
-            this.getMenu()
-              .removeClass('open');
-          });
-        }
-      }
-  }
+		,onItem: function(e, context) {
+			return true;
+		}
 
-  /* CONTEXT MENU PLUGIN DEFINITION
-   * ========================== */
+		,listen: function () {
+			var _this = this;
+			this.$element
+					.on('contextmenu.context.data-api',  $.proxy(this.show, this));
+			$('html')
+					.on('click.context.data-api', $.proxy(this.closemenu, this));
 
-  $.fn.contextmenu = function (option,e) {
-        return this.each(function () {
-          var $this = $(this)
-        , data = $this.data('context')
-        , options = typeof option == 'object' && option
-    
-      if (!data) $this.data('context', (data = new ContextMenu(this, options)));
-      // "show" method must also be passed the event for positioning
-      if (typeof option == 'string') data[option].call(data,e);
-    });
-  }
+			var $target = $(this.$element.attr('data-target'));
 
-  $.fn.contextmenu.Constructor = ContextMenu;
+			$target.on('click.context.data-api', function (e) {
+				_this.onItem.call(this,e,$(e.target));
+			});
 
-  /* APPLY TO STANDARD CONTEXT MENU ELEMENTS
-   * =================================== */
+			$('html').on('click.context.data-api', function (e) {
+				if (!e.ctrlKey) {
+					$target.removeClass('open');
+				}
+			});
+		}
 
-    $(document)
-      .on('contextmenu.context.data-api', '[data-toggle=context]', function(e) {
-          $(this).contextmenu('show',e);
-          e.preventDefault();
-      })
+		,getMenu: function () {
+			var selector = this.$element.attr('data-target')
+				, $menu;
+
+			if (!selector) {
+				selector = this.$element.attr('href')
+				selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
+			}
+
+			$menu = $(selector);
+
+			return $menu;
+		}
+
+		,getPosition: function(e, $menu) {
+			var mouseX = e.clientX
+				, mouseY = e.clientY
+				, boundsX = $(window).width()
+				, boundsY = $(window).height()
+				, menuWidth = $menu.find('.dropdown-menu').outerWidth()
+				, menuHeight = $menu.find('.dropdown-menu').outerHeight()
+				, tp = {"position":"fixed"}
+				, Y, X;
+
+			if (mouseY + menuHeight > boundsY) {
+				Y = {"top": mouseY - menuHeight};
+			} else {
+				Y = {"top": mouseY};
+			}
+
+			if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) > 0)) {
+				X = {"left": mouseX - menuWidth};
+			} else {
+				X = {"left": mouseX};
+			}
+
+			return $.extend(tp, Y, X);
+		}
+
+		,clearMenus: function(e) {
+			if (!e.ctrlKey) {
+				$('[data-toggle=context]').each(function() {
+					this.getMenu()
+						.removeClass('open');
+				});
+			}
+		}
+	}
+
+	/* CONTEXT MENU PLUGIN DEFINITION
+	 * ========================== */
+
+	$.fn.contextmenu = function (option,e) {
+		return this.each(function () {
+			var $this = $(this)
+				, data = $this.data('context')
+				, options = typeof option == 'object' && option
+		
+			if (!data) $this.data('context', (data = new ContextMenu(this, options)));
+			// "show" method must also be passed the event for positioning
+			if (typeof option == 'string') data[option].call(data,e);
+		});
+	}
+
+	$.fn.contextmenu.Constructor = ContextMenu;
+
+	/* APPLY TO STANDARD CONTEXT MENU ELEMENTS
+	 * =================================== */
+
+	$(document)
+		.on('contextmenu.context.data-api', '[data-toggle=context]', function(e) {
+				$(this).contextmenu('show',e);
+				e.preventDefault();
+		});
 
 }(window.jQuery));

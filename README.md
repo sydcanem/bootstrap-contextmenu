@@ -3,22 +3,25 @@ Bootstrap Context Menu
 
 A context menu extension of Twitter Bootstrap made for everyone's convenience.
 
-See a [JS Fiddle Demo] [id] 
-[id]:http://jsfiddle.net/msurguy/PG5HU/
-
 See a [new Fiddle] [id] showing the javascript parameters
-[id]:http://jsfiddle.net/LQVRU/2
+[id]:http://jsfiddle.net/sydcanem/W4rkT/
 
-Update
-------
+Change log
+----------
 
+13/05/2013
+- Added `onItem` option which is called whenever an item is clicked in the context menu
+- Added before, target options to javascript usage (`before` and `target`)
+- Fixed error with menu appearing off the screen
+
+26/03/2013
 - Removed `position: relative` requirement for elements that needs context menu
 - Fixed closing bug when using multiple context menu in a single page
 
-Update 2
---------
-- Added before and target options to javascript usage (`before` and `target`)
-- Fixed error with menu appearing off the screen
+Todo
+----
+
+- Tests
 
 Usage
 -----
@@ -35,16 +38,28 @@ Point `data-target` attribute to your custom context menu.
 
 Call the context menu via JavaScript:
 
-`$('.context').contextmenu({target:'#context-menu', before:function(e,element,target){return true;} })`
+    $('.context').contextmenu({
+      target:'#context-menu', 
+      before: function(e,element) {
+        // execute code before context menu if shown
+      },
+      onItem: function(e, element) {
+        // execute on menu item selection
+      }
+    })
 
-`target` is the equivalent of the `data-target` attribute. It identifies the html that will be displayed. Without it, you will not get a context menu.
+`target` is the equivalent of the `data-target` attribute. It identifies the html that will be displayed. 
 
-`before` is a function that is called before the context menu is displayed.
-If this function returns false, the context menu will not be displayed
-It is passed three parameters,
-  `e` - the original event. (You can do an `e.preventDefault()` to cancel the browser event)
-  `element` - the element where the event was set
-  `target` - the context menu
+`before` is a function that is called before the context menu is displayed. If this function returns false, the context menu will not be displayed. It is passed two parameters,
+
+  - `e` - the original event. (You can do an `e.preventDefault()` to cancel the browser event) 
+  - `element` - the element where the event was set
+
+`onItem` - function to be called when a menu item in contextmenu is clicked. Useful when you want to execute a specific function when an item is clicked. It is passed two parameters,
+
+  - `e` - the click event.
+  - `element` - the element of the menu item
+
 
 Example
 -------
@@ -56,8 +71,8 @@ Activate and specify selector for context menu
 Activate within a div, but not on spans
 
     $('#main').contextmenu({
-        "target": '#context-menu2',
-        "before": function (e, element, target) {
+        target: '#context-menu2',
+        before: function (e, element, target) {
             e.preventDefault();
             if (e.target.tagName == 'SPAN') {
                 e.preventDefault();
@@ -71,12 +86,19 @@ Activate within a div, but not on spans
 Modify the menu dynamically
 
     $('#main').contextmenu({
-      "target": "#myMenu",
-      "before": function(e) { 
+      target: "#myMenu",
+      before: function(e) { 
         this.getMenu().find("li").eq(2).find('a').html("This was dynamically changed");
       }
     });
-<BS><div id="main">
+
+Show menu name on selection
+
+    $('#main').contextmenu({
+      onItem: function(e, item) {
+        alert($(item).text());
+      }
+    });
 
 
 

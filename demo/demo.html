@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)http://twitter.github.com/bootstrap/examples/starter-template.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>Bootstrap, from Twitter</title>
@@ -47,10 +46,11 @@
 
     <div class="container">
     	<div class="span7">
-
-	      <h1>Demo</h1>
+        <h1>Demo</h1>
 	      <p>Right click inside the box to trigger the menu</p>
 
+        <h5>Demo 1</h5>
+        <p>Using <code>data-toggle="context"</code> to attach a context-menu</p>
 	      <!-- Element div that needs a custom context menu -->
 	      <div id="context" data-toggle="context" data-target="#context-menu" style="height:300px;width:650px;border:1px solid #ddd">
 	      </div>
@@ -58,13 +58,32 @@
 	      <!-- Your custom menu with dropdown-menu as default styling -->
 	      <div id="context-menu">
 	      	<ul class="dropdown-menu" role="menu">
-	      		<li><a tabindex="-1" href="#">Action</a></li>
-	            <li><a tabindex="-1" href="#">Another action</a></li>
-	            <li><a tabindex="-1" href="#">Something else here</a></li>
-	            <li class="divider"></li>
-	            <li><a tabindex="-1" href="#">Separated link</a></li>
+            <li><a tabindex="-1" href="#">Action</a></li>
+	           <li><a tabindex="-1" href="#">Another action</a></li>
+	           <li><a tabindex="-1" href="#">Something else here</a></li>
+	           <li class="divider"></li>
+	           <li><a tabindex="-1" href="#">Separated link</a></li>
 	      	</ul>
 	      </div>
+
+        <h5>Demo 2</h5>
+        <div id="main">This is an area where the context menu is active <span style="background-color: #cecece">However, we wont allow it here.</span> But anywhere else in this text should be perfectly fine. This one is started with only javascript</div>
+   
+        <div id="context-menu2">
+          <ul class="dropdown-menu" role="menu">
+              <li><a tabindex="-1" href="#">Action</a></li>
+              <li><a tabindex="-1" href="#">Another action</a></li>
+              <li><a tabindex="-1" href="#">Something else here</a></li>
+              <li class="divider"></li>
+              <li><a tabindex="-1" href="#">Separated link</a></li>
+          </ul>
+        </div>
+
+        <h5>Demo 3</h5>
+        <p>Show the menu name of the item that was selected</p>
+        <!-- Element div that needs a custom context menu -->
+        <div id="context2" style="height:300px;width:650px;border:1px solid #ddd">
+        </div>
 
 	      <h2>Usage</h2>
 	      <h3>Via data attributes</h3>
@@ -86,25 +105,40 @@
 	    <p>Call the context menus via Javascript:</p>
 	    <pre class="prettyprint linenums">
 $('.context').contextmenu();</pre>
-	    </div>
     </div> <!-- /container -->
+
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="assets/jquery.js"></script>
-    <script src="assets/bootstrap-transition.js"></script>
-    <script src="assets/bootstrap-alert.js"></script>
-    <script src="assets/bootstrap-modal.js"></script>
-    <script src="assets/bootstrap-dropdown.js"></script>
-    <script src="assets/bootstrap-scrollspy.js"></script>
-    <script src="assets/bootstrap-tab.js"></script>
-    <script src="assets/bootstrap-tooltip.js"></script>
-    <script src="assets/bootstrap-popover.js"></script>
-    <script src="assets/bootstrap-button.js"></script>
-    <script src="assets/bootstrap-collapse.js"></script>
-    <script src="assets/bootstrap-carousel.js"></script>
-    <script src="assets/bootstrap-typeahead.js"></script>
     <script src="../bootstrap-contextmenu.js"></script>
     <script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>
+    <script type="text/javascript">
+      // Demo 2
+      $('#main').contextmenu({
+          target: '#context-menu2',
+          before: function (e) {
+              // This function is optional.
+              // Here we use it to stop the event if the user clicks a span
+              e.preventDefault();
+              if (e.target.tagName == 'SPAN') {
+                  e.preventDefault();
+                  this.closemenu();
+                  return false;
+              }
+              this.getMenu().find("li").eq(2).find('a').html("This was dynamically changed");
+              return true;
+          }
+      });
+    </script>
+    <script type="text/javascript">
+      // Demo 3
+     $('#context2').contextmenu({
+        target: '#context-menu2',
+        onItem: function(e, item) {
+          alert($(item).text());
+        }
+     });
+    </script>
 </body></html>
