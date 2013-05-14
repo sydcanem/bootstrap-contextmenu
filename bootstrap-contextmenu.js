@@ -35,13 +35,13 @@
 	/* CONTEXTMENU CLASS DEFINITION
 	 * ============================ */
 
-	var ContextMenu = function (element, options) {
-			this.$element = $(element)
+	var ContextMenu = function (elements, options) {
+			this.$elements = $(elements)
 			this.options = options
 			this.before = this.options.before || this.before
 			this.onItem = this.options.onItem || this.onItem
 			if (this.options.target) 
-				this.$element.attr('data-target',this.options.target)
+				this.$elements.attr('data-target',this.options.target)
 
 			this.listen()
 		}
@@ -60,8 +60,8 @@
 			if ($this.is('.disabled, :disabled')) return;
 
 			evt = $.Event('context');
-			if (!this.before.call(this,e,this.$element)) return;
-			this.$element.trigger(evt);
+			if (!this.before.call(this,e,this.$elements)) return;
+			this.$elements.trigger(evt);
 
 			$menu = this.getMenu();
 
@@ -88,12 +88,12 @@
 
 		,listen: function () {
 			var _this = this;
-			this.$element
+			this.$elements
 					.on('contextmenu.context.data-api',  $.proxy(this.show, this));
 			$('html')
 					.on('click.context.data-api', $.proxy(this.closemenu, this));
 
-			var $target = $(this.$element.attr('data-target'));
+			var $target = $(this.$elements.attr('data-target'));
 
 			$target.on('click.context.data-api', function (e) {
 				_this.onItem.call(this,e,$(e.target));
@@ -107,11 +107,11 @@
 		}
 
 		,getMenu: function () {
-			var selector = this.$element.attr('data-target')
+			var selector = this.$elements.attr('data-target')
 				, $menu;
 
 			if (!selector) {
-				selector = this.$element.attr('href')
+				selector = this.$elements.attr('href')
 				selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
 			}
 
@@ -159,15 +159,15 @@
 	 * ========================== */
 
 	$.fn.contextmenu = function (option,e) {
-		return this.each(function () {
-			var $this = $(this)
-				, data = $this.data('context')
+		var $this = this;
+		return (function () {
+			var data = $this.data('context')
 				, options = typeof option == 'object' && option
 		
-			if (!data) $this.data('context', (data = new ContextMenu(this, options)));
+			if (!data) $this.data('context', (data = new ContextMenu($this, options)));
 			// "show" method must also be passed the event for positioning
 			if (typeof option == 'string') data[option].call(data,e);
-		});
+		})();
 	}
 
 	$.fn.contextmenu.Constructor = ContextMenu;
