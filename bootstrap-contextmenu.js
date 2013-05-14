@@ -60,7 +60,7 @@
 			if ($this.is('.disabled, :disabled')) return;
 
 			evt = $.Event('context');
-			if (!this.before.call(this,e,this.$elements)) return;
+			if (!this.before.call(this,e,$(e.currentTarget))) return;
 			this.$elements.trigger(evt);
 
 			$menu = this.getMenu();
@@ -89,7 +89,7 @@
 		,listen: function () {
 			var _this = this;
 			this.$elements
-					.on('contextmenu.context.data-api',  $.proxy(this.show, this));
+					.on('contextmenu.context.data-api', $.proxy(this.show, this));
 			$('html')
 					.on('click.context.data-api', $.proxy(this.closemenu, this));
 
