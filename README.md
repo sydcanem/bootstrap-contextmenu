@@ -9,6 +9,9 @@ See a [new Fiddle] [id] showing the javascript parameters
 Change log
 ----------
 
+24/05/2013
+- Added `onItem` argument element where the event was set
+
 13/05/2013
 - Added `onItem` option which is called whenever an item is clicked in the context menu
 - Added before, target options to javascript usage (`before` and `target`)
@@ -43,7 +46,7 @@ Call the context menu via JavaScript:
       before: function(e,element) {
         // execute code before context menu if shown
       },
-      onItem: function(e, element) {
+      onItem: function(e, item, element) {
         // execute on menu item selection
       }
     })
@@ -58,7 +61,8 @@ Call the context menu via JavaScript:
 `onItem` - function to be called when a menu item in contextmenu is clicked. Useful when you want to execute a specific function when an item is clicked. It is passed two parameters,
 
   - `e` - the click event.
-  - `element` - the element of the menu item
+  - `item` - the element of the menu item
+  - `element` - the element where the event was set
 
 
 Example
