@@ -96,7 +96,7 @@
 			var $target = $(this.$element.attr('data-target'));
 
 			$target.on('click.context.data-api', function (e) {
-				_this.onItem.call(this,e,$(e.target));
+				_this.onItem.call(this,e,$(e.target),_this.$element);
 			});
 
 			$('html').on('click.context.data-api', function (e) {
