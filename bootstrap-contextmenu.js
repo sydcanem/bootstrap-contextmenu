@@ -6,7 +6,7 @@
  *
  * New options added by @jeremyhubble for javascript launching
  *  $('#elem').contextmenu({target:'#menu',before:function(e) { return true; } });
- *   
+ *
  *
  * Twitter Bootstrap (http://twitter.github.com/bootstrap).
  */
@@ -40,7 +40,7 @@
 			this.options = options
 			this.before = this.options.before || this.before
 			this.onItem = this.options.onItem || this.onItem
-			if (this.options.target) 
+			if (this.options.target)
 				this.$elements.attr('data-target',this.options.target)
 
 			this.listen()
@@ -106,6 +106,14 @@
 			});
 		}
 
+		,destroy: function() {
+			this.$elements.off('.context.data-api').removeData('context');
+			$('html').off('.context.data-api');
+
+			var $target = $(this.$elements.attr('data-target'));
+			$target.off('.context.data-api');
+		}
+
 		,getMenu: function () {
 			var selector = this.$elements.attr('data-target')
 				, $menu;
@@ -163,7 +171,7 @@
 		return (function () {
 			var data = $this.data('context')
 				, options = typeof option == 'object' && option
-		
+
 			if (!data) $this.data('context', (data = new ContextMenu($this, options)));
 			// "show" method must also be passed the event for positioning
 			if (typeof option == 'string') data[option].call(data,e);
