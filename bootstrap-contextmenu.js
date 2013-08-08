@@ -68,6 +68,7 @@
 			var tp = this.getPosition(e, $menu);
 			$menu.attr('style', '')
 				.css(tp)
+				.data('_context_this_ref', this)
 				.addClass('open');
 
 
@@ -96,7 +97,9 @@
 			var $target = $(this.$elements.attr('data-target'));
 
 			$target.on('click.context.data-api', function (e) {
-				_this.onItem.call(this,e,$(e.target));
+				if($(this).data('_context_this_ref') == _this) {
+					_this.onItem.call(this,e,$(e.target));
+				}
 			});
 
 			$('html').on('click.context.data-api', function (e) {
