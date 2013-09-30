@@ -147,8 +147,12 @@
 				Y = {"top": mouseY};
 			}
 
-			if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) > 0)) {
-				X = {"left": mouseX - menuWidth};
+			if (mouseX + menuWidth > boundsX) {
+				if((mouseX - menuWidth) > 0) {
+					X = {"left": mouseX - menuWidth};
+				} else {
+					X = {"left": mouseX - ((mouseX + menuWidth) - boundsX)};
+				}
 			} else {
 				X = {"left": mouseX};
 			}
