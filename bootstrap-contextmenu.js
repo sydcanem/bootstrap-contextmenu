@@ -130,13 +130,13 @@
 				, boundsY = $(window).height()
 				, menuWidth = $menu.find('.dropdown-menu').outerWidth()
 				, menuHeight = $menu.find('.dropdown-menu').outerHeight()
-				, tp = {"position":"fixed"}
+				, tp = {"position":"absolute"}
 				, Y, X;
 
 			if (mouseY + menuHeight > boundsY) {
-				Y = {"top": mouseY - menuHeight};
+				Y = {"top": mouseY - menuHeight + $(window).scrollTop()};
 			} else {
-				Y = {"top": mouseY};
+				Y = {"top": mouseY + $(window).scrollTop()};
 			}
 
 			if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) > 0)) {
