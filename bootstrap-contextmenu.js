@@ -98,7 +98,7 @@
 
 			$target.on('click.context.data-api', function (e) {
 				if($(this).data('_context_this_ref') == _this) {
-					_this.onItem.call(this,e,$(e.target));
+					_this.onItem.call(this,e,$(e.target),_this.$elements);
 				}
 			});
 
@@ -148,9 +148,9 @@
 			}
 
 			if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) > 0)) {
-				X = {"left": mouseX - menuWidth};
+				X = {"left": mouseX - menuWidth + $(window).scrollLeft()};
 			} else {
-				X = {"left": mouseX};
+				X = {"left": mouseX + $(window).scrollLeft()};
 			}
 
 			return $.extend(tp, Y, X);
