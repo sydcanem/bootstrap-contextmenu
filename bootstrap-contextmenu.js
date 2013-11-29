@@ -148,9 +148,9 @@
 			}
 
 			if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) > 0)) {
-				X = {"left": mouseX - menuWidth};
+				X = {"left": mouseX - menuWidth + $(window).scrollLeft()};
 			} else {
-				X = {"left": mouseX};
+				X = {"left": mouseX + $(window).scrollLeft()};
 			}
 
 			return $.extend(tp, Y, X);
