@@ -3,25 +3,8 @@ Bootstrap Context Menu
 
 A context menu extension of Twitter Bootstrap made for everyone's convenience.
 
-See a [new Fiddle] [id] showing the javascript parameters
-[id]:http://jsfiddle.net/sydcanem/W4rkT/
-
-Change log
-----------
-
-13/05/2013
-- Added `onItem` option which is called whenever an item is clicked in the context menu
-- Added before, target options to javascript usage (`before` and `target`)
-- Fixed error with menu appearing off the screen
-
-26/03/2013
-- Removed `position: relative` requirement for elements that needs context menu
-- Fixed closing bug when using multiple context menu in a single page
-
-Todo
-----
-
-- Tests
+See a [demo page] [id].
+[id]:http://sydcanem.github.io/bootstrap-contextmenu/
 
 Usage
 -----
