@@ -40,6 +40,7 @@
 			this.options = options
 			this.before = this.options.before || this.before
 			this.onItem = this.options.onItem || this.onItem
+      this.dissapearAfter = this.options.dissapearAfter || 1500
 			if (this.options.target)
 				this.$elements.attr('data-target',this.options.target)
 
@@ -52,9 +53,22 @@
 		,show: function(e) {
 
 			var $this = $(this)
+        , that = this
 				, $menu
 				, $contextmenu
 				, evt;
+        , tmr = function() {
+          if ($this.timer) {
+            clearTimeout($this.timer);
+          }
+
+          $this.timer = setTimeout(function () {
+            $this.timer = null;
+            if(!$menu.live)
+              that.closemenu();
+          }, that.options.dissapearAfter);
+
+        };
 
 
 			if ($this.is('.disabled, :disabled')) return;
@@ -71,6 +85,17 @@
 				.data('_context_this_ref', this)
 				.addClass('open');
 
+      // Inactivity Timer
+      tmr();
+      $($menu).bind('mouseenter', function(e) {
+        $menu.live = true;
+      });
+      $($menu).bind('mouseleave', function(e) {
+        $menu.live = false;
+      });
+      $($menu).bind('mousemove', function(e) {
+        tmr();
+      });
 
 			return false;
 		}
