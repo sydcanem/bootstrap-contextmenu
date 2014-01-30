@@ -56,7 +56,7 @@
         , that = this
 				, $menu
 				, $contextmenu
-				, evt;
+				, evt
         , tmr = function() {
           if ($this.timer) {
             clearTimeout($this.timer);
@@ -66,7 +66,7 @@
             $this.timer = null;
             if(!$menu.live)
               that.closemenu();
-          }, that.options.dissapearAfter);
+          }, that.dissapearAfter);
 
         };
 
