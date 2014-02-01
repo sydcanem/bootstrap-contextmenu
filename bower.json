@@ -1,0 +1,22 @@
+{
+  "name": "bootstrap-contextmenu",
+  "main": "bootstrap-contextmenu.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/sydcanem/bootstrap-contextmenu",
+  "authors": [
+    "sydcanem <icqhv.santos@gmail.com>"
+  ],
+  "description": "Context-menu extension for Twitter's Bootstrap framework",
+  "keywords": [
+    "boostrap",
+    "contextmenu"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
