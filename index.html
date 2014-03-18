@@ -130,6 +130,9 @@ $('.context').contextmenu();</pre>
       // Demo 3
      $('#context2').contextmenu({
         target: '#context-menu2',
+        beforeOpen: function(e){
+            alert('Callback before contextMenu open');
+          },
         onItem: function(e, item) {
           alert($(item).text());
         }

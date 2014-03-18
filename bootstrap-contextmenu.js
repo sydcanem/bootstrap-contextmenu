@@ -38,6 +38,7 @@
 	var ContextMenu = function (elements, options) {
 			this.$elements = $(elements)
 			this.options = options
+            this.beforeOpen = this.options.beforeOpen || this.beforeOpen
 			this.before = this.options.before || this.before
 			this.onItem = this.options.onItem || this.onItem
 			if (this.options.target)
@@ -50,7 +51,7 @@
 
 		constructor: ContextMenu
 		,show: function(e) {
-
+            this.beforeOpen();
 			var $this = $(this)
 				, $menu
 				, $contextmenu
@@ -77,6 +78,10 @@
 
 		,closemenu: function(e) {
 			this.getMenu().removeClass('open');
+		}
+        
+        ,beforeOpen: function(e) {
+			return true;
 		}
 
 		,before: function(e) {
