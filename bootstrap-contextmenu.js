@@ -40,6 +40,7 @@
 			this.options = options
 			this.before = this.options.before || this.before
 			this.onItem = this.options.onItem || this.onItem
+			this.after = this.options.after || this.after
 			if (this.options.target)
 				this.$elements.attr('data-target',this.options.target)
 
@@ -76,6 +77,7 @@
 		}
 
 		,closemenu: function(e) {
+			this.after();
 			this.getMenu().removeClass('open');
 		}
 
@@ -86,7 +88,11 @@
 		,onItem: function(e, context) {
 			return true;
 		}
-
+		
+		,after: function(e) {
+			return true;
+		}
+		
 		,listen: function () {
 			var _this = this;
 			this.$elements
@@ -104,6 +110,8 @@
 
 			$('html').on('click.context.data-api', function (e) {
 				if (!e.ctrlKey) {
+					if($target.hasClass('open'))
+						$target.after()
 					$target.removeClass('open');
 				}
 			});
@@ -159,6 +167,7 @@
 		,clearMenus: function(e) {
 			if (!e.ctrlKey) {
 				$('[data-toggle=context]').each(function() {
+					this.after();
 					this.getMenu()
 						.removeClass('open');
 				});
