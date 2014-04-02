@@ -90,7 +90,7 @@
 		}
 		
 		,after: function(e) {
-		      return true;
+			return true;
 		}
 		
 		,listen: function () {
@@ -110,7 +110,8 @@
 
 			$('html').on('click.context.data-api', function (e) {
 				if (!e.ctrlKey) {
-					this.after();
+					if($target.hasClass('open'))
+						$target.after()
 					$target.removeClass('open');
 				}
 			});
