@@ -41,7 +41,7 @@
 			this.before = this.options.before || this.before
 			this.onItem = this.options.onItem || this.onItem
 			if (this.options.target)
-				this.$elements.attr('data-target',this.options.target)
+				this.$elements.data('target',this.options.target)
 
 			this.listen()
 		}
@@ -94,7 +94,7 @@
 			$('html')
 					.on('click.context.data-api', $.proxy(this.closemenu, this));
 
-			var $target = $(this.$elements.attr('data-target'));
+			var $target = $(this.$elements.data('target'));
 
 			$target.on('click.context.data-api', function (e) {
 				if($(this).data('_context_this_ref') == _this) {
@@ -113,12 +113,12 @@
 			this.$elements.off('.context.data-api').removeData('context');
 			$('html').off('.context.data-api');
 
-			var $target = $(this.$elements.attr('data-target'));
+			var $target = $(this.$elements.data('target'));
 			$target.off('.context.data-api');
 		}
 
 		,getMenu: function () {
-			var selector = this.$elements.attr('data-target')
+			var selector = this.$elements.data('target')
 				, $menu;
 
 			if (!selector) {
