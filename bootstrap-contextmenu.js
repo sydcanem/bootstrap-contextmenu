@@ -1,6 +1,6 @@
 /*!
  * Bootstrap Context Menu
- * Version: 2.1
+ * Version: 2.0
  * A small variation of the dropdown plugin by @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
  *
@@ -30,21 +30,25 @@
 
 !(function($) {
 
-	"use strict"; // jshint ;_;
+	"use strict";
 
 	/* CONTEXTMENU CLASS DEFINITION
 	 * ============================ */
 
-	var ContextMenu = function (elements, options) {
-			this.$elements = $(elements)
-			this.options = options
-			this.before = this.options.before || this.before
-			this.onItem = this.options.onItem || this.onItem
-			if (this.options.target)
-				this.$elements.attr('data-target',this.options.target)
+	var ContextMenu = function (element, options) {
+		this.$elements = $(element);
 
-			this.listen()
+
+		this.before = options.before || this.before;
+		this.onItem = options.onItem || this.onItem;
+		this.menuItem = options.menuItem || "li:not(.divider)";
+
+		if (options.target) {
+			this.$elements.attr('data-target', options.target);
 		}
+
+		this.listen.call(this);
+	};
 
 	ContextMenu.prototype = {
 
@@ -68,53 +72,45 @@
 			var tp = this.getPosition(e, $menu);
 			$menu.attr('style', '')
 				.css(tp)
-				.data('_context_this_ref', this)
-				.addClass('open');
+				.addClass('open')
+				.on('click.context.data-api', this.menuItem, $.proxy(this.onItem, this));
 
+			// Delegating the `closemenu` only on the currently opened menu.
+			// This prevents other opened menus from closing.
+			$('html')
+				.on('click.context.data-api', $menu.selector, $.proxy(this.closemenu, this));
 
 			return false;
 		}
 
 		,closemenu: function(e) {
-			this.getMenu().removeClass('open');
+			var $menu = this.getMenu();
+			$menu
+				.removeClass('open')
+				.off('click.context.data-api', this.menuItem);
+			$('html')
+				.off('.context.data-api', $menu.selector);
+			// Don't propagate click event so other currently
+			// opened menus won't close.
+			return false;
 		}
 
 		,before: function(e) {
 			return true;
 		}
 
-		,onItem: function(e, context) {
+		,onItem: function(e) {
 			return true;
 		}
 
 		,listen: function () {
-			var _this = this;
-			this.$elements
-					.on('contextmenu.context.data-api', $.proxy(this.show, this));
-			$('html')
-					.on('click.context.data-api', $.proxy(this.closemenu, this));
-
-			var $target = $(this.$elements.attr('data-target'));
-
-			$target.on('click.context.data-api', function (e) {
-				if($(this).data('_context_this_ref') == _this) {
-					_this.onItem.call(this,e,$(e.target));
-				}
-			});
-
-			$('html').on('click.context.data-api', function (e) {
-				if (!e.ctrlKey) {
-					$target.removeClass('open');
-				}
-			});
+			this.$elements.on('contextmenu.context.data-api', $.proxy(this.show, this));
+			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
 		}
 
 		,destroy: function() {
 			this.$elements.off('.context.data-api').removeData('context');
-			$('html').off('.context.data-api');
-
-			var $target = $(this.$elements.attr('data-target'));
-			$target.off('.context.data-api');
+			$('html').off('click.context.data-api');
 		}
 
 		,getMenu: function () {
@@ -122,8 +118,8 @@
 				, $menu;
 
 			if (!selector) {
-				selector = this.$elements.attr('href')
-				selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
+				selector = this.$elements.attr('href');
+				selector = selector && selector.replace(/.*(?=#[^\s]*$)/, ''); //strip for ie7
 			}
 
 			$menu = $(selector);
@@ -138,7 +134,7 @@
 				, boundsY = $(window).height()
 				, menuWidth = $menu.find('.dropdown-menu').outerWidth()
 				, menuHeight = $menu.find('.dropdown-menu').outerHeight()
-				, tp = {"position":"absolute"}
+				, tp = {"position":"absolute","z-index":9999}
 				, Y, X;
 
 			if (mouseY + menuHeight > boundsY) {
@@ -156,15 +152,7 @@
 			return $.extend(tp, Y, X);
 		}
 
-		,clearMenus: function(e) {
-			if (!e.ctrlKey) {
-				$('[data-toggle=context]').each(function() {
-					this.getMenu()
-						.removeClass('open');
-				});
-			}
-		}
-	}
+	};
 
 	/* CONTEXT MENU PLUGIN DEFINITION
 	 * ========================== */
@@ -173,11 +161,10 @@
 		var $this = this;
 		return (function () {
 			var data = $this.data('context')
-				, options = typeof option == 'object' && option
+				, options = (typeof option == 'object') && option;
 
 			if (!data) $this.data('context', (data = new ContextMenu($this, options)));
-			// "show" method must also be passed the event for positioning
-			if (typeof option == 'string') data[option].call(data,e);
+			if (typeof option == 'string') data[option].call(data, e);
 		})();
 	}
 
@@ -187,9 +174,9 @@
 	 * =================================== */
 
 	$(document)
-		.on('contextmenu.context.data-api', '[data-toggle=context]', function(e) {
-				$(this).contextmenu('show',e);
-				e.preventDefault();
+		.on('contextmenu.context.data-api', '[data-toggle="context"]', function(e) {
+			$(this).contextmenu('show', e);
+			e.preventDefault();
 		});
 
-}(window.jQuery));
+}(jQuery));

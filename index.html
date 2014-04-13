@@ -130,8 +130,8 @@ $('.context').contextmenu();</pre>
       // Demo 3
      $('#context2').contextmenu({
         target: '#context-menu2',
-        onItem: function(e, item) {
-          alert($(item).text());
+        onItem: function(e) {
+          alert($(e.target).text());
         }
      });
     </script>
