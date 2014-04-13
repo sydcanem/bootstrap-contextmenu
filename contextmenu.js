@@ -37,14 +37,14 @@
 	var toggle = '[data-toggle="context"]';
 
 	var ContextMenu = function (element, options) {
-		this.$elements = $(element);
+		this.$element = $(element);
 
 		this.before = options.before || this.before;
 		this.onItem = options.onItem || this.onItem;
 		this.scopes = options.scopes || null;
 
 		if (options.target) {
-			this.$elements.attr('data-target', options.target);
+			this.$element.attr('data-target', options.target);
 		}
 
 		this.listen();
@@ -55,14 +55,13 @@
 		constructor: ContextMenu
 		,show: function(e) {
 
-			var $this = $(this)
-				, $menu
+			var $menu
 				, evt
 				, tp
 				, items
 				, relatedTarget = { relatedTarget: this };
 
-			if ($this.is('.disabled, :disabled')) return;
+			if (this.isDisabled()) return;
 
 			this.closemenu();
 
@@ -121,27 +120,32 @@
 		}
 
 		,listen: function () {
-			this.$elements.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
+			this.$element.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
 			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
 		}
 
 		,destroy: function() {
-			this.$elements.off('.context.data-api').removeData('context');
+			this.$element.off('.context.data-api').removeData('context');
 			$('html').off('.context.data-api');
 		}
 
+		,isDisabled: function() {
+			return this.$element.hasClass('.disabled') || 
+					this.$element.attr('disabled');
+		}
+
 		,getMenu: function () {
-			var selector = this.$elements.attr('data-target')
+			var selector = this.$element.attr('data-target')
 				, $menu;
 
 			if (!selector) {
-				selector = this.$elements.attr('href');
+				selector = this.$element.attr('href');
 				selector = selector && selector.replace(/.*(?=#[^\s]*$)/, ''); //strip for ie7
 			}
 
 			$menu = $(selector);
 
-			return $menu;
+			return $menu && $menu.length ? $menu : this.$element.find(selector);
 		}
 
 		,getPosition: function(e, $menu) {
@@ -175,14 +179,14 @@
 	 * ========================== */
 
 	$.fn.contextmenu = function (option,e) {
-		var $this = this;
-		return (function () {
-			var data = $this.data('context')
+		return this.each(function () {
+			var $this = $(this)
+				, data = $this.data('context')
 				, options = (typeof option == 'object') && option;
 
 			if (!data) $this.data('context', (data = new ContextMenu($this, options)));
 			if (typeof option == 'string') data[option].call(data, e);
-		})();
+		});
 	};
 
 	$.fn.contextmenu.Constructor = ContextMenu;
