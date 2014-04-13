@@ -1,31 +1,13 @@
 /*!
  * Bootstrap Context Menu
  * Version: 2.0
- * A small variation of the dropdown plugin by @sydcanem
+ * Author: @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
  *
- * New options added by @jeremyhubble for javascript launching
- *  $('#elem').contextmenu({target:'#menu',before:function(e) { return true; } });
- *
- *
+ * Inspired by Twitter Bootstrap's dropdown plugin.
  * Twitter Bootstrap (http://twitter.github.com/bootstrap).
- */
-
-/* =========================================================
- * bootstrap-contextmenu.js
- * =========================================================
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Licensed under MIT
  * ========================================================= */
 
 ;(function($) {
