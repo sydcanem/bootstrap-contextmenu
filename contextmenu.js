@@ -28,26 +28,26 @@
  * limitations under the License.
  * ========================================================= */
 
-!(function($) {
+;(function($) {
 
-	"use strict";
+	'use strict';
 
 	/* CONTEXTMENU CLASS DEFINITION
 	 * ============================ */
+	var toggle = '[data-toggle="context"]';
 
 	var ContextMenu = function (element, options) {
 		this.$elements = $(element);
 
-
 		this.before = options.before || this.before;
 		this.onItem = options.onItem || this.onItem;
-		this.menuItem = options.menuItem || "li:not(.divider)";
+		this.scopes = options.scopes || null;
 
 		if (options.target) {
 			this.$elements.attr('data-target', options.target);
 		}
 
-		this.listen.call(this);
+		this.listen();
 	};
 
 	ContextMenu.prototype = {
@@ -57,23 +57,27 @@
 
 			var $this = $(this)
 				, $menu
-				, $contextmenu
-				, evt;
-
+				, evt
+				, tp
+				, items
+				, relatedTarget = { relatedTarget: this };
 
 			if ($this.is('.disabled, :disabled')) return;
 
-			evt = $.Event('context');
+			this.closemenu();
+
 			if (!this.before.call(this,e,$(e.currentTarget))) return;
-			this.$elements.trigger(evt);
 
 			$menu = this.getMenu();
+			$menu.trigger(evt = $.Event('show.bs.context', relatedTarget));
 
-			var tp = this.getPosition(e, $menu);
+			tp = this.getPosition(e, $menu);
+			items = 'li:not(.divider)';
 			$menu.attr('style', '')
 				.css(tp)
 				.addClass('open')
-				.on('click.context.data-api', this.menuItem, $.proxy(this.onItem, this));
+				.on('click.context.data-api', items, this.onItem.bind(this, $(e.currentTarget)))
+				.trigger('shown.bs.context', relatedTarget);
 
 			// Delegating the `closemenu` only on the currently opened menu.
 			// This prevents other opened menus from closing.
@@ -84,12 +88,25 @@
 		}
 
 		,closemenu: function(e) {
-			var $menu = this.getMenu();
-			$menu
-				.removeClass('open')
-				.off('click.context.data-api', this.menuItem);
+			var $menu
+				, evt
+				, items
+				, relatedTarget;
+
+			$menu = this.getMenu();
+
+			if(!$menu.hasClass('open')) return;
+
+			relatedTarget = { relatedTarget: this };
+			$menu.trigger(evt = $.Event('hide.bs.context', relatedTarget));
+
+			items = 'li:not(.divider)';
+			$menu.removeClass('open')
+				.off('click.context.data-api', items)
+				.trigger('hidden.bs.context', relatedTarget);
+
 			$('html')
-				.off('.context.data-api', $menu.selector);
+				.off('click.context.data-api', $menu.selector);
 			// Don't propagate click event so other currently
 			// opened menus won't close.
 			return false;
@@ -104,13 +121,13 @@
 		}
 
 		,listen: function () {
-			this.$elements.on('contextmenu.context.data-api', $.proxy(this.show, this));
+			this.$elements.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
 			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
 		}
 
 		,destroy: function() {
 			this.$elements.off('.context.data-api').removeData('context');
-			$('html').off('click.context.data-api');
+			$('html').off('.context.data-api');
 		}
 
 		,getMenu: function () {
@@ -166,7 +183,7 @@
 			if (!data) $this.data('context', (data = new ContextMenu($this, options)));
 			if (typeof option == 'string') data[option].call(data, e);
 		})();
-	}
+	};
 
 	$.fn.contextmenu.Constructor = ContextMenu;
 
@@ -174,7 +191,7 @@
 	 * =================================== */
 
 	$(document)
-		.on('contextmenu.context.data-api', '[data-toggle="context"]', function(e) {
+		.on('contextmenu.context.data-api', toggle, function(e) {
 			$(this).contextmenu('show', e);
 			e.preventDefault();
 		});
