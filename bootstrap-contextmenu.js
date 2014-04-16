@@ -1,6 +1,6 @@
 /*!
  * Bootstrap Context Menu
- * Version: 2.0
+ * Version: 0.2.0
  * Author: @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
  *
@@ -57,7 +57,7 @@
 			$menu.attr('style', '')
 				.css(tp)
 				.addClass('open')
-				.on('click.context.data-api', items, this.onItem.bind(this, $(e.currentTarget)))
+				.on('click.context.data-api', items, $.proxy(this.onItem, this, $(e.currentTarget)))
 				.trigger('shown.bs.context', relatedTarget);
 
 			// Delegating the `closemenu` only on the currently opened menu.
