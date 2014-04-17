@@ -23,26 +23,29 @@ Call the context menu via JavaScript:
 
     $('.context').contextmenu({
       target:'#context-menu', 
-      before: function(e,element) {
+      before: function(e,context) {
         // execute code before context menu if shown
       },
-      onItem: function(e, element) {
+      onItem: function(context,e) {
         // execute on menu item selection
       }
     })
 
-`target` is the equivalent of the `data-target` attribute. It identifies the html that will be displayed. 
+### Options
 
-`before` is a function that is called before the context menu is displayed. If this function returns false, the context menu will not be displayed. It is passed two parameters,
+`target` - is the equivalent of the `data-target` attribute. It identifies the html of the menu that will be displayed. 
 
-  - `e` - the original event. (You can do an `e.preventDefault()` to cancel the browser event) 
-  - `element` - the element where the event was set
+`before` - is a function that is called before the context menu is displayed. If this function returns false, the context menu will not be displayed. It is passed two parameters,
 
-`onItem` - function to be called when a menu item in contextmenu is clicked. Useful when you want to execute a specific function when an item is clicked. It is passed two parameters,
+  - `e` - the original event. (You can do an `e.preventDefault()` to cancel the browser event). 
+  - `context` - the DOM element where right click occured.
 
-  - `e` - the click event.
-  - `element` - the element of the menu item
+`onItem` - is a function that is called when a menu item is clicked. Useful when you want to execute a specific function when an item is clicked. It is passed two parameters,
 
+  - `context` - the DOM element where right click occured.
+  - `e` - the click event of the menu item, $(e.target) is the item element.
+
+`scopes` - DOM selector for dynamically added context elements. See [issue](https://github.com/sydcanem/bootstrap-contextmenu/issues/56).
 
 Example
 -------
@@ -54,16 +57,16 @@ Activate and specify selector for context menu
 Activate within a div, but not on spans
 
     $('#main').contextmenu({
-        target: '#context-menu2',
-        before: function (e, element, target) {
-            e.preventDefault();
-            if (e.target.tagName == 'SPAN') {
-                e.preventDefault();
-                this.closemenu();
-                return false;
-            }
-            return true;
-        }
+      target: '#context-menu2',
+      before: function (e, element, target) {
+          e.preventDefault();
+          if (e.target.tagName == 'SPAN') {
+              e.preventDefault();
+              this.closemenu();
+              return false;
+          }
+          return true;
+      }
     });
 
 Modify the menu dynamically
@@ -78,8 +81,8 @@ Modify the menu dynamically
 Show menu name on selection
 
     $('#main').contextmenu({
-      onItem: function(e, item) {
-        alert($(item).text());
+      onItem: function(context, e) {
+        alert($(e.target).text());
       }
     });
 
