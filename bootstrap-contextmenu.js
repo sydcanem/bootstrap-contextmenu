@@ -139,11 +139,11 @@
 				, menuHeight = $menu.find('.dropdown-menu').outerHeight()
 				, tp = {"position":"absolute","z-index":9999}
 				, Y, X;
-
+                
 			if (mouseY + menuHeight > boundsY) {
 				Y = {"top": mouseY - menuHeight + $(window).scrollTop()};
 			} else {
-				Y = {"top": mouseY + $(window).scrollTop()};
+				Y = {"top": mouseY + $(window).scrollTop() };
 			}
 
 			if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) > 0)) {
@@ -152,7 +152,14 @@
 				X = {"left": mouseX + $(window).scrollLeft()};
 			}
 
-			return $.extend(tp, Y, X);
+			// If the developer has positioned the context-menu's parent using absolute or relative positioning,
+			// the calculated mouse position will be incorrect.
+			// Adjust the position of the menu by its offset parent position.
+			var selectorPosition = $menu.offsetParent().offset();
+			X.left = X.left - selectorPosition.left;
+			Y.top = Y.top - selectorPosition.top;
+
+			return $.extend(tp, X , Y );
 		}
 
 	};
