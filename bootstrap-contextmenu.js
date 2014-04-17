@@ -26,7 +26,7 @@
 		this.scopes = options.scopes || null;
 
 		if (options.target) {
-			this.$element.attr('data-target', options.target);
+			this.$element.data('target', options.target);
 		}
 
 		this.listen();
@@ -117,7 +117,7 @@
 		}
 
 		,getMenu: function () {
-			var selector = this.$element.attr('data-target')
+			var selector = this.$element.data('target')
 				, $menu;
 
 			if (!selector) {
