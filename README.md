@@ -49,6 +49,22 @@ Call the context menu via JavaScript:
 
 `scopes` - DOM selector for dynamically added context elements. See [issue](https://github.com/sydcanem/bootstrap-contextmenu/issues/56).
 
+### Events
+
+All events are fired at the context's menu. Check out `dropdown` plugin for
+a complete description of events.
+
+- `show.bs.context` - This event fires immediately when the menu is opened. 
+- `shown.bs.context` - This event is fired when the dropdown has been made visible to the user. 
+- `hide.bs.context` - This event is fired immediately when the hide instance method has been called. 
+- `hidden.bs.context` - This event is fired when the dropdown has finished being hidden from the user (will wait for CSS transitions, to complete).
+  
+Sample
+
+    $('#myMenu').on('show.bs.context',function () {
+      // do something...
+    });
+
 Example
 -------
 
