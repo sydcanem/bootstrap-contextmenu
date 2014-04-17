@@ -1,134 +1,133 @@
 /*!
  * Bootstrap Context Menu
- * Version: 2.1
- * A small variation of the dropdown plugin by @sydcanem
+ * Version: 0.2.0
+ * Author: @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
  *
- * New options added by @jeremyhubble for javascript launching
- *  $('#elem').contextmenu({target:'#menu',before:function(e) { return true; } });
- *
- *
+ * Inspired by Twitter Bootstrap's dropdown plugin.
  * Twitter Bootstrap (http://twitter.github.com/bootstrap).
- */
-
-/* =========================================================
- * bootstrap-contextmenu.js
- * =========================================================
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Licensed under MIT
  * ========================================================= */
 
-!(function($) {
+;(function($) {
 
-	"use strict"; // jshint ;_;
+	'use strict';
 
 	/* CONTEXTMENU CLASS DEFINITION
 	 * ============================ */
+	var toggle = '[data-toggle="context"]';
 
-	var ContextMenu = function (elements, options) {
-			this.$elements = $(elements)
-			this.options = options
-			this.before = this.options.before || this.before
-			this.onItem = this.options.onItem || this.onItem
-			if (this.options.target)
-				this.$elements.attr('data-target',this.options.target)
+	var ContextMenu = function (element, options) {
+		this.$element = $(element);
 
-			this.listen()
+		this.before = options.before || this.before;
+		this.onItem = options.onItem || this.onItem;
+		this.scopes = options.scopes || null;
+
+		if (options.target) {
+			this.$element.data('target', options.target);
 		}
+
+		this.listen();
+	};
 
 	ContextMenu.prototype = {
 
 		constructor: ContextMenu
 		,show: function(e) {
 
-			var $this = $(this)
-				, $menu
-				, $contextmenu
-				, evt;
+			var $menu
+				, evt
+				, tp
+				, items
+				, relatedTarget = { relatedTarget: this };
 
+			if (this.isDisabled()) return;
 
-			if ($this.is('.disabled, :disabled')) return;
+			this.closemenu();
 
-			evt = $.Event('context');
 			if (!this.before.call(this,e,$(e.currentTarget))) return;
-			this.$elements.trigger(evt);
 
 			$menu = this.getMenu();
+			$menu.trigger(evt = $.Event('show.bs.context', relatedTarget));
 
-			var tp = this.getPosition(e, $menu);
+			tp = this.getPosition(e, $menu);
+			items = 'li:not(.divider)';
 			$menu.attr('style', '')
 				.css(tp)
-				.data('_context_this_ref', this)
-				.addClass('open');
+				.addClass('open')
+				.on('click.context.data-api', items, $.proxy(this.onItem, this, $(e.currentTarget)))
+				.trigger('shown.bs.context', relatedTarget);
 
+			// Delegating the `closemenu` only on the currently opened menu.
+			// This prevents other opened menus from closing.
+			$('html')
+				.on('click.context.data-api', $menu.selector, $.proxy(this.closemenu, this));
 
 			return false;
 		}
 
 		,closemenu: function(e) {
-			this.getMenu().removeClass('open');
+			var $menu
+				, evt
+				, items
+				, relatedTarget;
+
+			$menu = this.getMenu();
+
+			if(!$menu.hasClass('open')) return;
+
+			relatedTarget = { relatedTarget: this };
+			$menu.trigger(evt = $.Event('hide.bs.context', relatedTarget));
+
+			items = 'li:not(.divider)';
+			$menu.removeClass('open')
+				.off('click.context.data-api', items)
+				.trigger('hidden.bs.context', relatedTarget);
+
+			$('html')
+				.off('click.context.data-api', $menu.selector);
+			// Don't propagate click event so other currently
+			// opened menus won't close.
+			return false;
 		}
 
 		,before: function(e) {
 			return true;
 		}
 
-		,onItem: function(e, context) {
+		,onItem: function(e) {
 			return true;
 		}
 
 		,listen: function () {
-			var _this = this;
-			this.$elements
-					.on('contextmenu.context.data-api', $.proxy(this.show, this));
-			$('html')
-					.on('click.context.data-api', $.proxy(this.closemenu, this));
-
-			var $target = $(this.$elements.attr('data-target'));
-
-			$target.on('click.context.data-api', function (e) {
-				if($(this).data('_context_this_ref') == _this) {
-					_this.onItem.call(this,e,$(e.target));
-				}
-			});
-
-			$('html').on('click.context.data-api', function (e) {
-				if (!e.ctrlKey) {
-					$target.removeClass('open');
-				}
-			});
+			this.$element.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
+			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
 		}
 
 		,destroy: function() {
-			this.$elements.off('.context.data-api').removeData('context');
+			this.$element.off('.context.data-api').removeData('context');
 			$('html').off('.context.data-api');
+		}
 
-			var $target = $(this.$elements.attr('data-target'));
-			$target.off('.context.data-api');
+		,isDisabled: function() {
+			return this.$element.hasClass('.disabled') || 
+					this.$element.attr('disabled');
 		}
 
 		,getMenu: function () {
-			var selector = this.$elements.attr('data-target')
+			var selector = this.$element.data('target')
 				, $menu;
 
 			if (!selector) {
-				selector = this.$elements.attr('href')
-				selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
+				selector = this.$element.attr('href');
+				selector = selector && selector.replace(/.*(?=#[^\s]*$)/, ''); //strip for ie7
 			}
 
 			$menu = $(selector);
 
-			return $menu;
+			return $menu && $menu.length ? $menu : this.$element.find(selector);
 		}
 
 		,getPosition: function(e, $menu) {
@@ -138,7 +137,7 @@
 				, boundsY = $(window).height()
 				, menuWidth = $menu.find('.dropdown-menu').outerWidth()
 				, menuHeight = $menu.find('.dropdown-menu').outerHeight()
-				, tp = {"position":"absolute"}
+				, tp = {"position":"absolute","z-index":9999}
 				, Y, X;
 
 			if (mouseY + menuHeight > boundsY) {
@@ -156,30 +155,21 @@
 			return $.extend(tp, Y, X);
 		}
 
-		,clearMenus: function(e) {
-			if (!e.ctrlKey) {
-				$('[data-toggle=context]').each(function() {
-					this.getMenu()
-						.removeClass('open');
-				});
-			}
-		}
-	}
+	};
 
 	/* CONTEXT MENU PLUGIN DEFINITION
 	 * ========================== */
 
 	$.fn.contextmenu = function (option,e) {
-		var $this = this;
-		return (function () {
-			var data = $this.data('context')
-				, options = typeof option == 'object' && option
+		return this.each(function () {
+			var $this = $(this)
+				, data = $this.data('context')
+				, options = (typeof option == 'object') && option;
 
 			if (!data) $this.data('context', (data = new ContextMenu($this, options)));
-			// "show" method must also be passed the event for positioning
-			if (typeof option == 'string') data[option].call(data,e);
-		})();
-	}
+			if (typeof option == 'string') data[option].call(data, e);
+		});
+	};
 
 	$.fn.contextmenu.Constructor = ContextMenu;
 
@@ -187,9 +177,9 @@
 	 * =================================== */
 
 	$(document)
-		.on('contextmenu.context.data-api', '[data-toggle=context]', function(e) {
-				$(this).contextmenu('show',e);
-				e.preventDefault();
+		.on('contextmenu.context.data-api', toggle, function(e) {
+			$(this).contextmenu('show', e);
+			e.preventDefault();
 		});
 
-}(window.jQuery));
+}(jQuery));

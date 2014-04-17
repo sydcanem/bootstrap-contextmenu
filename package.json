@@ -1,0 +1,29 @@
+{
+  "name": "bootstrap-contextmenu",
+  "version": "0.2.0",
+  "description": "Context-menu extension for Twitter's Bootstrap framework",
+  "main": "bootstrap-contextmenu.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sydcanem/bootstrap-contextmenu.git"
+  },
+  "keywords": [
+    "bootstrap"
+  ],
+  "author": "James Santos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sydcanem/bootstrap-contextmenu/issues"
+  },
+  "homepage": "https://github.com/sydcanem/bootstrap-contextmenu",
+  "devDependencies": {
+    "gulp": "^3.6.0",
+    "gulp-qunit": "^0.3.3"
+  }
+}
