@@ -104,11 +104,5 @@ Show menu name on selection
       }
     });
 
-
-
-See demo.html for a complete example.
-
-Cross-Browser Tested
---------------------
-
-I've tested the context menu plugin on IE8+, Firefox 4+ and Chrome. Let me know if you find any compatibility issues.
+### License
+MIT
