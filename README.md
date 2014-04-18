@@ -6,7 +6,12 @@ A context menu extension of Twitter Bootstrap made for everyone's convenience.
 See a [demo page] [id].
 [id]:http://sydcanem.github.io/bootstrap-contextmenu/
 
+Installation
+------------
+
 `bower install bootstrap-contextmenu`
+
+Note: Requires bootstrap.css
 
 Usage
 -----
