@@ -112,7 +112,7 @@
 		}
 
 		,isDisabled: function() {
-			return this.$element.hasClass('.disabled') || 
+			return this.$element.hasClass('.disabled') ||
 					this.$element.attr('disabled');
 		}
 
@@ -156,9 +156,9 @@
 			// the calculated mouse position will be incorrect.
 			// Adjust the position of the menu by its offset parent position.
 			parentOffset = $menu.offsetParent().offset();
-			X.left = X.left - parentOffset.left;
+			X.left = X.left - parentOffset.left + $menu.offsetParent().scrollLeft();
 			Y.top = Y.top - parentOffset.top;
- 
+
 			return $.extend(tp, Y, X);
 		}
 
