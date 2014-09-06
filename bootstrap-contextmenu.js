@@ -112,7 +112,7 @@
 		}
 
 		,isDisabled: function() {
-			return this.$element.hasClass('.disabled') || 
+			return this.$element.hasClass('disabled') || 
 					this.$element.attr('disabled');
 		}
 
