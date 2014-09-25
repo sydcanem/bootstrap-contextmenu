@@ -108,6 +108,11 @@ Show menu name on selection
         alert($(e.target).text());
       }
     });
+    
+### Nice to have features:
+
+ - Close and open animations
+ - Keyboard shortcuts for menus
 
 ### License
 MIT
