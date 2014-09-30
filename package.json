@@ -1,7 +1,7 @@
 {
   "name": "bootstrap-contextmenu",
   "version": "0.2.0",
-  "description": "Context-menu extension for Twitter's Bootstrap framework",
+  "description": "Context-menu extension for the Bootstrap framework",
   "main": "bootstrap-contextmenu.js",
   "directories": {
     "test": "test"
