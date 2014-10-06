@@ -1,7 +1,7 @@
 Bootstrap Context Menu
 ======================
 
-A context menu extension of Twitter Bootstrap made for everyone's convenience.
+A context menu extension of Bootstrap made for everyone's convenience.
 
 See a [demo page] [id].
 [id]:http://sydcanem.github.io/bootstrap-contextmenu/

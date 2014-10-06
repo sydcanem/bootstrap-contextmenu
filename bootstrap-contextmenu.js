@@ -4,8 +4,8 @@
  * Author: @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
  *
- * Inspired by Twitter Bootstrap's dropdown plugin.
- * Twitter Bootstrap (http://twitter.github.com/bootstrap).
+ * Inspired by Bootstrap's dropdown plugin.
+ * Bootstrap (http://getbootstrap.com).
  *
  * Licensed under MIT
  * ========================================================= */
