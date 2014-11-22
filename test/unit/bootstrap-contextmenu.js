@@ -305,4 +305,30 @@ $(function () {
 		contextmenu.trigger('contextmenu');
 		$(document.body).click();
 	});
+
+		test('should remove open class if keyboard escape key is pressed', function () {
+		var contextHTML = '<div>' +
+				'<div id="main" data-toggle="context" data-target="#context-menu">' +
+				'  <div id="context-menu">' +
+				'    <ul class="dropdown-menu">' +
+				'      <li><a href="#">Action</a></li>' +
+				'      <li><a href="#">Something else here</a></li>' +
+				'      <li class="divider"></li>' +
+				'      <li><a href="#">Another link</a></li>' +
+				'    <ul>' +
+				'  </div>' +
+				'</div>' +
+				'</div>',
+			contextmenu = $(contextHTML)
+				.appendTo('#qunit-fixture')
+				.find('[data-toggle="context"]')
+				.contextmenu()
+				.trigger('contextmenu');
+
+
+		ok(contextmenu.find('#context-menu').hasClass('open'), 'open class added on right click');
+		$('body').trigger($.Event('keydown', { which: 27 }));
+		ok(!contextmenu.find('#context-menu').hasClass('open'), 'open class removed');
+		contextmenu.remove();
+	});
 });

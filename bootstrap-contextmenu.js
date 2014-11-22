@@ -1,6 +1,5 @@
 /*!
  * Bootstrap Context Menu
- * Version: 0.2.0
  * Author: @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
  *
@@ -93,6 +92,10 @@
 			return false;
 		}
 
+		,keydown: function(e) {
+			if (e.which == 27) this.closemenu(e);
+		}
+
 		,before: function(e) {
 			return true;
 		}
@@ -104,6 +107,7 @@
 		,listen: function () {
 			this.$element.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
 			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
+			$('html').on('keydown.context.data-api', $.proxy(this.keydown, this));
 		}
 
 		,destroy: function() {
