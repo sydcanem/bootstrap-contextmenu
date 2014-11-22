@@ -28,15 +28,17 @@ Point `data-target` attribute to your custom context menu.
 
 Call the context menu via JavaScript:
 
-    $('.context').contextmenu({
-      target:'#context-menu', 
-      before: function(e,context) {
-        // execute code before context menu if shown
-      },
-      onItem: function(context,e) {
-        // execute on menu item selection
-      }
-    })
+```js
+$('.context').contextmenu({
+  target:'#context-menu', 
+  before: function(e,context) {
+    // execute code before context menu if shown
+  },
+  onItem: function(context,e) {
+    // execute on menu item selection
+  }
+})
+```
 
 ### Options
 
@@ -66,49 +68,59 @@ a complete description of events.
   
 Sample
 
-    $('#myMenu').on('show.bs.context',function () {
-      // do something...
-    });
+```js
+$('#myMenu').on('show.bs.context',function () {
+  // do something...
+});
+```
 
 Example
 -------
 
 Activate and specify selector for context menu
 
-    $('#main').contextmenu({'target':'#context-menu'});
+```js
+$('#main').contextmenu({'target':'#context-menu'});
+```
 
 Activate within a div, but not on spans
 
-    $('#main').contextmenu({
-      target: '#context-menu2',
-      before: function (e, element, target) {
+```js
+$('#main').contextmenu({
+  target: '#context-menu2',
+  before: function (e, element, target) {
+      e.preventDefault();
+      if (e.target.tagName == 'SPAN') {
           e.preventDefault();
-          if (e.target.tagName == 'SPAN') {
-              e.preventDefault();
-              this.closemenu();
-              return false;
-          }
-          return true;
+          this.closemenu();
+          return false;
       }
-    });
+      return true;
+  }
+});
+```
 
 Modify the menu dynamically
 
-    $('#main').contextmenu({
-      target: "#myMenu",
-      before: function(e) { 
-        this.getMenu().find("li").eq(2).find('a').html("This was dynamically changed");
-      }
-    });
+```js
+$('#main').contextmenu({
+  target: "#myMenu",
+  before: function(e) { 
+    this.getMenu().find("li").eq(2).find('a').html("This was dynamically changed");
+  }
+});
+```
 
 Show menu name on selection
 
-    $('#main').contextmenu({
-      onItem: function(context, e) {
-        alert($(e.target).text());
-      }
-    });
-    
+```js
+$('#main').contextmenu({
+  onItem: function(context, e) {
+    alert($(e.target).text());
+  }
+});
+```
+
 ### Nice to have features:
 
  - Close and open animations
