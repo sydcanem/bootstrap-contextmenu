@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>Bootstrap</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -61,7 +61,7 @@
 	      </div>
 
         <h5>Demo 2</h5>
-        <div id="main">This is an area where the context menu is active <span style="background-color: #cecece">However, we wont allow it here.</span> But anywhere else in this text should be perfectly fine. This one is started with only javascript</div>
+        <div id="main" data-toggle="context">This is an area where the context menu is active <span style="background-color: #cecece">However, we wont allow it here.</span> But anywhere else in this text should be perfectly fine. This one is started with only javascript</div>
    
         <div id="context-menu2">
           <ul class="dropdown-menu" role="menu">
@@ -76,7 +76,7 @@
         <h5>Demo 3</h5>
         <p>Show the menu name of the item that was selected</p>
         <!-- Element div that needs a custom context menu -->
-        <div id="context2" style="height:300px;width:650px;border:1px solid #ddd">
+        <div id="context2" data-toggle="context" style="height:300px;width:650px;border:1px solid #ddd">
         </div>
 
 	      <h2>Usage</h2>
@@ -111,28 +111,44 @@ $('.context').contextmenu();</pre>
     <script type="text/javascript">
       // Demo 2
       $('#main').contextmenu({
-          target: '#context-menu2',
-          before: function (e) {
-              // This function is optional.
-              // Here we use it to stop the event if the user clicks a span
-              e.preventDefault();
-              if (e.target.tagName == 'SPAN') {
-                  e.preventDefault();
-                  this.closemenu();
-                  return false;
-              }
-              this.getMenu().find("li").eq(2).find('a').html("This was dynamically changed");
-              return true;
+        target: '#context-menu2',
+        before: function (e) {
+          // This function is optional.
+          // Here we use it to stop the event if the user clicks a span
+          e.preventDefault();
+          if (e.target.tagName == 'SPAN') {
+            e.preventDefault();
+            this.closemenu();
+            return false;
           }
+          this.getMenu().find("li").eq(2).find('a').html("This was dynamically changed");
+          return true;
+        }
       });
     </script>
     <script type="text/javascript">
       // Demo 3
-     $('#context2').contextmenu({
+      $('#context2').contextmenu({
         target: '#context-menu2',
-        onItem: function(e, item) {
-          alert($(item).text());
+        onItem: function (context, e) {
+          alert($(e.target).text());
         }
-     });
+      });
+
+      $('#context-menu2').on('show.bs.context', function (e) {
+        console.log('before show event');
+      });
+
+      $('#context-menu2').on('shown.bs.context', function (e) {
+        console.log('after show event');
+      });
+
+      $('#context-menu2').on('hide.bs.context', function (e) {
+        console.log('before hide event');
+      });
+
+      $('#context-menu2').on('hidden.bs.context', function (e) {
+        console.log('after hide event');
+      });
     </script>
 </body></html>
