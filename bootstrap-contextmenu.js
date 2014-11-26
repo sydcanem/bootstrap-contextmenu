@@ -188,9 +188,18 @@
 	 * =================================== */
 
 	$(document)
+	   .on('contextmenu.context.data-api', function() {
+			$(toggle).each(function () {
+				var data = $(this).data('context');
+				if (!data) return;
+				data.closemenu();
+			});
+		})
 		.on('contextmenu.context.data-api', toggle, function(e) {
 			$(this).contextmenu('show', e);
-			e.preventDefault();
-		});
 
+			e.preventDefault();
+			e.stopPropagation();
+		});
+		
 }(jQuery));
