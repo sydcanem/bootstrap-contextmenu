@@ -40,7 +40,7 @@
 				, evt
 				, tp
 				, items
-				, relatedTarget = { relatedTarget: this };
+				, relatedTarget = { relatedTarget: this, target: e.currentTarget };
 
 			if (this.isDisabled()) return;
 
