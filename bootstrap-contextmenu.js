@@ -46,7 +46,7 @@
 
 			this.closemenu();
 
-			if (!this.before.call(this,e,$(e.currentTarget))) return;
+			if (this.before.call(this,e,$(e.currentTarget)) === false) return;
 
 			$menu = this.getMenu();
 			$menu.trigger(evt = $.Event('show.bs.context', relatedTarget));
