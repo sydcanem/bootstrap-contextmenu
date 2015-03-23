@@ -34,6 +34,9 @@ $('.context').contextmenu({
   before: function(e,context) {
     // execute code before context menu if shown
   },
+  after: function(e,context) {
+    // execute code after context menu is hidden
+  },
   onItem: function(context,e) {
     // execute on menu item selection
   }
@@ -46,7 +49,12 @@ $('.context').contextmenu({
 
 `before` - is a function that is called before the context menu is displayed. If this function returns false, the context menu will not be displayed. It is passed two parameters,
 
-  - `e` - the original event. (You can do an `e.preventDefault()` to cancel the browser event). 
+  - `e` - the original event. (You can do an `e.preventDefault()` to cancel the browser event).
+  - `context` - the DOM element where right click occured.
+
+`after` - is a function that is called when the context menu is going to be closed. If this function returns false, the context menu will not be closed. It is passed two parameters,
+
+  - `e` - the original event. (You can do an `e.preventDefault()` to cancel the browser event).
   - `context` - the DOM element where right click occured.
 
 `onItem` - is a function that is called when a menu item is clicked. Useful when you want to execute a specific function when an item is clicked. It is passed two parameters,
