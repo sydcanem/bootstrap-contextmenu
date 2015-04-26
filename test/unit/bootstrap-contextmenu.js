@@ -209,6 +209,42 @@ $(function () {
 		contextmenu.remove();
 	});
 
+	test('should not open context-menu if before returns false', function () {
+		var contextHTML = '<div>' +
+				'<div id="main" data-toggle="context" data-target="#context-menu">' +
+				'  <div id="context-menu">' +
+				'    <ul class="dropdown-menu">' +
+				'      <li><a href="#">Action</a></li>' +
+				'      <li><a href="#">Something else here</a></li>' +
+				'      <li class="divider"></li>' +
+				'      <li><a href="#">Another link</a></li>' +
+				'   <ul>' +
+				'  </div>' +
+				'</div>' +
+				'</div>',
+			contextmenu = $(contextHTML).find('[data-toggle="context"]').contextmenu({ before: function() { return false; }}).trigger('contextmenu');
+		
+		ok(!contextmenu.find('#context-menu').hasClass('open'), 'open class added on contextmenu');
+	});
+
+	test('should open context-menu if before does not return anything', function () {
+		var contextHTML = '<div>' +
+				'<div id="main" data-toggle="context" data-target="#context-menu">' +
+				'  <div id="context-menu">' +
+				'    <ul class="dropdown-menu">' +
+				'      <li><a href="#">Action</a></li>' +
+				'      <li><a href="#">Something else here</a></li>' +
+				'      <li class="divider"></li>' +
+				'      <li><a href="#">Another link</a></li>' +
+				'   <ul>' +
+				'  </div>' +
+				'</div>' +
+				'</div>',
+			contextmenu = $(contextHTML).find('[data-toggle="context"]').contextmenu({ before: function() { }}).trigger('contextmenu');
+		
+		ok(contextmenu.find('#context-menu').hasClass('open'), 'open class not added on contextmenu');
+	});
+
 	test('calls onItem callback if an menu item is clicked', function () {
 		var contextHTML = '<div>' + 
 				'<div id="main" data-toggle="context" data-target="#context-menu">' +
