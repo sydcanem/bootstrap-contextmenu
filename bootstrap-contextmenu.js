@@ -23,6 +23,7 @@
 		this.before = options.before || this.before;
 		this.onItem = options.onItem || this.onItem;
 		this.scopes = options.scopes || null;
+		this.container = options.container || window;
 
 		if (options.target) {
 			this.$element.data('target', options.target);
@@ -137,23 +138,23 @@
 		,getPosition: function(e, $menu) {
 			var mouseX = e.clientX
 				, mouseY = e.clientY
-				, boundsX = $(window).width()
-				, boundsY = $(window).height()
+				, boundsX = $(this.container).width()
+				, boundsY = $(this.container).height()
 				, menuWidth = $menu.find('.dropdown-menu').outerWidth()
 				, menuHeight = $menu.find('.dropdown-menu').outerHeight()
 				, tp = {"position":"absolute","z-index":9999}
 				, Y, X, parentOffset;
 
 			if (mouseY + menuHeight > boundsY) {
-				Y = {"top": mouseY - menuHeight + $(window).scrollTop()};
+				Y = {"top": mouseY - menuHeight + $(this.container).scrollTop()};
 			} else {
-				Y = {"top": mouseY + $(window).scrollTop()};
+				Y = {"top": mouseY + $(this.container).scrollTop()};
 			}
 
 			if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) > 0)) {
-				X = {"left": mouseX - menuWidth + $(window).scrollLeft()};
+				X = {"left": mouseX - menuWidth + $(this.container).scrollLeft()};
 			} else {
-				X = {"left": mouseX + $(window).scrollLeft()};
+				X = {"left": mouseX + $(this.container).scrollLeft()};
 			}
 
 			// If context-menu's parent is positioned using absolute or relative positioning,
