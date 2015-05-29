@@ -23,6 +23,7 @@
 		this.before = options.before || this.before;
 		this.onItem = options.onItem || this.onItem;
 		this.scopes = options.scopes || null;
+		this.trigger = options.trigger || 'right';
 
 		if (options.target) {
 			this.$element.data('target', options.target);
@@ -89,7 +90,7 @@
 				.off('click.context.data-api', $menu.selector);
 			// Don't propagate click event so other currently
 			// opened menus won't close.
-			e.stopPropagation();
+			if (typeof e === 'object') e.stopPropagation();
 		}
 
 		,keydown: function(e) {
@@ -105,7 +106,11 @@
 		}
 
 		,listen: function () {
-			this.$element.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
+			var listenEvent = 'contextmenu';
+			if (this.trigger === 'left') {
+				listenEvent = 'click';
+			}
+			this.$element.on(listenEvent+'.context.data-api', this.scopes, $.proxy(this.show, this));
 			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
 			$('html').on('keydown.context.data-api', $.proxy(this.keydown, this));
 		}
