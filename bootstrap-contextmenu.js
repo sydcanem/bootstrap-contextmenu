@@ -52,7 +52,7 @@
 			$menu = this.getMenu();
 			$menu.trigger(evt = $.Event('show.bs.context', relatedTarget));
 
-			tp = this.getPosition(e, $menu);
+			tp = {"left": e.pageX, "top": e.pageY, "position":"absolute", "z-index":9999};
 			items = 'li:not(.divider)';
 			$menu.attr('style', '')
 				.css(tp)
