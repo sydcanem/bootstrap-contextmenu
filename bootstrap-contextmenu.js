@@ -23,6 +23,7 @@
 		this.before = options.before || this.before;
 		this.onItem = options.onItem || this.onItem;
 		this.scopes = options.scopes || null;
+		this.onclick = options.onclick || false;
 
 		if (options.target) {
 			this.$element.data('target', options.target);
@@ -107,7 +108,8 @@
 		}
 
 		,listen: function () {
-			this.$element.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
+            if(!this.onclick) this.$element.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
+            else this.$element.on('click', this.scopes, $.proxy(this.show, this));
 			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
 			$('html').on('keydown.context.data-api', $.proxy(this.keydown, this));
 		}
