@@ -23,6 +23,7 @@
 		this.before = options.before || this.before;
 		this.onItem = options.onItem || this.onItem;
 		this.scopes = options.scopes || null;
+		this.onclick = options.onclick || false;
 
 		if (options.target) {
 			this.$element.data('target', options.target);
@@ -89,7 +90,9 @@
 				.off('click.context.data-api', $menu.selector);
 			// Don't propagate click event so other currently
 			// opened menus won't close.
-			e.stopPropagation();
+            try {
+                e.stopPropagation();
+            } catch (e) {}
 		}
 
 		,keydown: function(e) {
@@ -105,7 +108,8 @@
 		}
 
 		,listen: function () {
-			this.$element.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
+            if(!this.onclick) this.$element.on('contextmenu.context.data-api', this.scopes, $.proxy(this.show, this));
+            else this.$element.on('click', this.scopes, $.proxy(this.show, this));
 			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
 			$('html').on('keydown.context.data-api', $.proxy(this.keydown, this));
 		}
@@ -141,7 +145,7 @@
 				, boundsY = $(window).height()
 				, menuWidth = $menu.find('.dropdown-menu').outerWidth()
 				, menuHeight = $menu.find('.dropdown-menu').outerHeight()
-				, tp = {"position":"absolute","z-index":9999}
+				, tp = {"position":"absolute","z-index":/*9999*/66003}
 				, Y, X, parentOffset;
 
 			if (mouseY + menuHeight > boundsY) {
