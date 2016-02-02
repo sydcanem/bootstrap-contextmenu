@@ -89,7 +89,8 @@
 				.off('click.context.data-api', $menu.selector);
 			// Don't propagate click event so other currently
 			// opened menus won't close.
-			e.stopPropagation();
+			if (undefined != e)
+				e.stopPropagation();
 		}
 
 		,keydown: function(e) {
