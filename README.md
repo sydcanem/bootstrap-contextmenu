@@ -1,7 +1,22 @@
 Bootstrap Context Menu
 ======================
 
-A context menu extension of Bootstrap made for everyone's convenience.
+#This project is unmaintained. Please use the alternative https://github.com/swisnl/jQuery-contextMenu.
+
+I have an issue with the plugin but I would still like to use it.
+
+-- Please fork the project and do your fixes.
+
+Where can I get support if can't fix some issue?
+
+-- You can check the issues page or pull request page if someone has a fix for your problem and merge it with your fork.
+
+I still can't find fixes of my issues.
+
+-- Get plenty of sleep. :)
+
+
+## A context menu extension of Bootstrap made for everyone's convenience.
 
 See a [demo page] [id].
 [id]:http://sydcanem.github.io/bootstrap-contextmenu/
