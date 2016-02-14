@@ -21,6 +21,7 @@
 		this.$element = $(element);
 
 		this.before = options.before || this.before;
+		this.after = options.after || this.after;
 		this.onItem = options.onItem || this.onItem;
 		this.scopes = options.scopes || null;
 
@@ -87,6 +88,9 @@
 
 			$('html')
 				.off('click.context.data-api', $menu.selector);
+
+			if (!this.after.call(this,e,$(e.currentTarget))) return;
+
 			// Don't propagate click event so other currently
 			// opened menus won't close.
 			if (e) {
@@ -99,6 +103,10 @@
 		}
 
 		,before: function(e) {
+			return true;
+		}
+
+		,after: function(e) {
 			return true;
 		}
 
