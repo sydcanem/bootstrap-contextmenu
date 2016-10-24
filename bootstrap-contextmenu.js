@@ -52,7 +52,7 @@
 			$menu = this.getMenu();
 			$menu.trigger(evt = $.Event('show.bs.context', relatedTarget));
 
-			tp = {"left": e.pageX, "top": e.pageY, "position":"absolute", "z-index":9999};
+			tp = this.getPosition(e, $menu);
 			items = 'li:not(.divider)';
 			$menu.attr('style', '')
 				.css(tp)
@@ -90,7 +90,11 @@
 				.off('click.context.data-api', $menu.selector);
 			// Don't propagate click event so other currently
 			// opened menus won't close.
-			if (typeof e === 'object') e.stopPropagation();
+			if (typeof e === 'object') {
+				e.stopPropagation();
+				// preventDefault so page doesn't scroll to top
+				e.preventDefault();
+			}
 		}
 
 		,keydown: function(e) {
@@ -106,11 +110,21 @@
 		}
 
 		,listen: function () {
-			var listenEvent = 'contextmenu';
-			if (this.trigger === 'left') {
-				listenEvent = 'click';
-			}
-			this.$element.on(listenEvent+'.context.data-api', this.scopes, $.proxy(this.show, this));
+		   var listenEvent = 'contextmenu';
+           if (this.trigger === 'left') {
+               listenEvent = 'click';
+           }
+           this.$element.on(listenEvent+'.context.data-api', this.scopes, $.proxy(this.show, this));
+		   if (listenEvent != 'click') {
+		   	// add a click listener that ignores control-clicks to work around a Safari issue when using control-click to right click
+		   	this.$element.on('click.context.data-api', this.scopes, function(e) {
+		   		if (e.ctrlKey) {
+		   			e.stopPropagation();
+		   			return;
+		   		}
+		   	});
+		   }
+
 			$('html').on('click.context.data-api', $.proxy(this.closemenu, this));
 			$('html').on('keydown.context.data-api', $.proxy(this.keydown, this));
 		}
@@ -167,6 +181,10 @@
 			parentOffset = $menu.offsetParent().offset();
 			X.left = X.left - parentOffset.left;
 			Y.top = Y.top - parentOffset.top;
+
+			// TEST TODO
+			Y = {"top": e.pageY};
+			X = {"left": e.pageX};
  
 			return $.extend(tp, Y, X);
 		}
