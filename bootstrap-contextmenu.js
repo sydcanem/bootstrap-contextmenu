@@ -45,10 +45,10 @@
 			if (this.isDisabled()) return;
 
 			this.closemenu();
-
-			if (this.before.call(this,e,$(e.currentTarget)) === false) return;
-
 			$menu = this.getMenu();
+
+			if (this.before.call(this,e,$(e.currentTarget),$menu) === false) return;
+			
 			$menu.trigger(evt = $.Event('show.bs.context', relatedTarget));
 
 			tp = this.getPosition(e, $menu);
